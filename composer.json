@@ -1,0 +1,14 @@
+{
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+    },
+    "autoload": {
+        "files": [
+            "BharatPHP/helpers.php"
+        ],
+        "psr-4": {
+            "BharatPHP\\": "BharatPHP/",
+            "App\\": "app/src/"
+        }
+    }
+}
