@@ -6,7 +6,7 @@ return array_merge(
             'paths' => [
                 'views' => [
                     // 'default' => BharatPHP_VIEW_PATH . '/app/src/views',
-                    'default' => BharatPHP_VIEW_PATH,
+                    'default' => BharatPHP_VIEW_PATH . '/default',
                     'backend' => BharatPHP_VIEW_PATH . '/backend',
                 // '404' => BharatPHP_ROOT_PATH . '/errors/404.phtml',
                 //            'app' => BharatPHP_ROOT_PATH . '/app/src/views/application',

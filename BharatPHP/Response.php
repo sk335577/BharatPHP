@@ -153,6 +153,19 @@ class Response {
     }
 
     /**
+     * Send redirect and exit
+     *
+     * @param  string  $url
+     * @param  string  $code
+     * @param  string  $version
+     * @return void
+     */
+    public static function redirectAndExit($url, $code = '302', $version = '1.1') {
+        static::redirect($url, $code, $version);
+        exit();
+    }
+
+    /**
      * Get response message from code
      *
      * @param  int $code

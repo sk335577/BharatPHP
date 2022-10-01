@@ -12,20 +12,20 @@ class View {
     protected $layout = 'default';
     public string $page_title = '';
 
-    public function renderViewOnly($view, array $params, $layout = 'layouts/default') {
+    public function renderViewOnly($view, array $params, $viewtype = 'default') {
         foreach ($params as $key => $value) {
             $$key = $value;
         }
         ob_start();
 
-        include_once BharatPHP_VIEW_PATH . "/$view.phtml";
+        include_once BharatPHP_VIEW_PATH . "/$viewtype/$view.phtml";
         return ob_get_clean();
     }
 
     public function renderView($view, array $params, $layout = 'layouts/default', $viewtype = 'default') {
 
         $layout = config('paths.views.' . $viewtype) . '/' . $layout . '.phtml';
-        $viewContent = $this->renderViewOnly($view, $params, $layout);
+        $viewContent = $this->renderViewOnly($view, $params, $viewtype);
 
         ob_start();
 
