@@ -3,12 +3,12 @@
 namespace BharatPHP;
 
 use BharatPHP\Exception\NotFoundException;
+use BharatPHP\Routes;
 
 class Router {
 
     private Request $request;
     private Response $response;
-    private static array $routeMap = [];
 
     /**
      * __construct
@@ -22,27 +22,6 @@ class Router {
         $this->response = $response;
     }
 
-    /**
-     * get
-     * 
-     * @param string $url
-     * @param type $callback
-     */
-    public static function get(string $url, $callback) {
-        self::$routeMap['get'][$url] = $callback;
-    }
-
-    public static function post(string $url, $callback) {
-        self::$routeMap['post'][$url] = $callback;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRouteMap($method): array {
-        return self::$routeMap[$method] ?? [];
-    }
-
     public function getCallback() {
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
@@ -50,12 +29,13 @@ class Router {
         $url = trim($url, '/');
 
         // Get all routes for current request method
-        $routes = $this->getRouteMap($method);
+        $routes = Routes::getRouteMap($method);
 
         $routeParams = false;
 
         // Start iterating registed routes
         foreach ($routes as $route => $callback) {
+
             // Trim slashes
             $route = trim($route, '/');
             $routeNames = [];
@@ -81,7 +61,7 @@ class Router {
                 $routeParams = array_combine($routeNames, $values);
 
                 $this->request->setRouteParams($routeParams);
-                return $callback;
+                return $callback['callback'];
             }
         }
 
@@ -93,7 +73,11 @@ class Router {
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
 
-        $callback = self::$routeMap[$method][$url] ?? false;
+        $method_routes = Routes::getRouteMap($method);
+
+        $current_route_info = $method_routes[$url] ?? false;
+
+        $callback = isset($current_route_info['callback']) ? $current_route_info['callback'] : false;
 
         if (!$callback) {
             $callback = $this->getCallback();
@@ -111,11 +95,26 @@ class Router {
 
             $controller = new $callback[0]($this->request, $this->response);
             $controller->action = $callback[1];
-            Application::app()->controller = $controller;
-            $middlewares = $controller->getMiddlewares();
-            foreach ($middlewares as $middleware) {
-                $middleware->execute();
+
+            app()->controller = $controller;
+
+            if (isset($current_route_info['options']['middleware'])) {
+//                $middlewares = $controller->getMiddlewares();
+                $middlewares = $current_route_info['options']['middleware'];
+                $middleware_response = null;
+
+                foreach ($middlewares as $middleware) {
+                    $middleware = new $middleware;
+                    $middleware_response = $middleware->execute($this->request, $this->response);
+                }
+
+                if (!is_null($middleware_response)) {
+                    return $middleware_response;
+                }
             }
+
+
+
             $callback[0] = $controller;
         }
         // return call_user_func($callback, $this->request, $this->response);
@@ -123,11 +122,11 @@ class Router {
     }
 
     public function renderView($view, $params = []) {
-        return Application::app()->view()->renderView($view, $params);
+        return view()->renderView($view, $params);
     }
 
     public function renderViewOnly($view, $params = []) {
-        return Application::app()->view()->renderViewOnly($view, $params);
+        return view()->renderViewOnly($view, $params);
     }
 
 }

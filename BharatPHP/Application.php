@@ -90,6 +90,10 @@ class Application {
         return $this->request;
     }
 
+    public function response() {
+        return $this->response;
+    }
+
     public function view() {
         return $this->view;
     }
@@ -116,12 +120,11 @@ class Application {
         try {
             $this->router->resolve();
         } catch (\Exception $e) {
-
-            //TODO: Use Response Class
-            echo $this->router->renderView('errors/404', [
-                'exception' => $e,
-            ]);
+            $this->response()->setCode(404);
+            $this->response()->setBody(view('errors/404'));
         }
+
+        $this->response()->send();
 
         $this->events->trigger('after.app.route', array('app' => $this));
     }

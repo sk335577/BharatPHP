@@ -8,21 +8,33 @@ function config($path, $default = '') {
 }
 
 function appUrl() {
-    return Application::app()->request()->appUrl();
+    return app()->request()->appUrl();
 }
 
 function printAppUrl() {
-    echo Application::app()->request()->appUrl();
+    echo app()->request()->appUrl();
 }
 
 function getTemplatePart($part, $viewtype = 'frontend') {
-    return Application::app()->view()->getTemplatePart($part);
+    return app()->view()->getTemplatePart($part);
 }
 
 function view($view, $params = []) {
-    return Application::app()->view()->renderView($view, $params);
+    return app()->view()->renderView($view, $params);
+}
+
+function app() {
+    return Application::app();
+}
+
+function response($view, $http_code = 200) {
+
+    app()->response()->setCode($http_code);
+    app()->response()->setBody($view);
+
+    return app()->response();
 }
 
 function printTemplatePart($part, $viewtype = 'frontend') {
-    echo Application::app()->view()->getTemplatePart($part);
+    echo app()->view()->getTemplatePart($part);
 }

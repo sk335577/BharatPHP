@@ -11,9 +11,7 @@ use App\Models\Users;
 class HomeController extends Controller {
 
     public function home() {
-
-        $this->response()->setBody(view('home/index', []));
-        $this->response()->send();
+        return response(view('home/index', []));
     }
 
 }
