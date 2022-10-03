@@ -3,6 +3,7 @@
 namespace BharatPHP;
 
 use Exception;
+use BharatPHP\Cookie;
 
 class Response {
 
@@ -534,6 +535,7 @@ class Response {
      * @return void
      */
     public function send($code = null, array $headers = null) {
+
         if (headers_sent()) {
             throw new Exception('The headers have already been sent.');
         }
@@ -544,6 +546,16 @@ class Response {
         if (null !== $headers) {
             $this->setHeaders($headers);
         }
+
+        // cookies
+        if (!empty(Cookie::$jar)) {
+            foreach (Cookie::$jar as $cookie) {
+//                setcookie($cookie['name'], $cookie['value'], $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+                setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure']);
+            }
+        }
+
+
 
         $body = $this->body;
 

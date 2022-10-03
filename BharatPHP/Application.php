@@ -8,6 +8,7 @@ use BharatPHP\Events;
 use BharatPHP\Request;
 use BharatPHP\Response;
 use BharatPHP\Config;
+use BharatPHP\Session;
 
 class Application {
 
@@ -115,15 +116,20 @@ class Application {
      */
     public function run() {
 
+
+        Session::load();
+
         $this->events->trigger('before.app.route', array('app' => $this));
 
         try {
             $this->router->resolve();
         } catch (\Exception $e) {
+//            print_r($e);
             $this->response()->setCode(404);
             $this->response()->setBody(view('errors/404'));
         }
 
+        Session::save();
         $this->response()->send();
 
         $this->events->trigger('after.app.route', array('app' => $this));

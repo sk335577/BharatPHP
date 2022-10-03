@@ -9,7 +9,7 @@ use PDO;
  *
  * @author Sandeep Kumar
  */
-abstract class Database {
+class Database {
 
     static private $db = [];
     static protected $connection = "mysql";
@@ -20,28 +20,36 @@ abstract class Database {
      *
      * @return mixed
      */
-    protected static function getDB() {
+    public static function getDBConnection($connection = null) {
 
 
         $db_config = config("database");
 
-        if (isset(self::$db[static::$connection])) {
-            return self::$db[static::$connection];
+        if (!is_null($connection)) {
+            $db_connection = $connection;
+        } else {
+            $db_connection = static::$connection;
         }
 
-        if (isset($db_config['connections'][static::$connection])) {
-            $dsn = 'mysql:host=' . $db_config['connections'][static::$connection]['host'] . ';dbname=' . $db_config['connections'][static::$connection]['database'] . ';charset=utf8';
-            $db = new PDO($dsn, $db_config['connections'][static::$connection]['username'], $db_config['connections'][static::$connection]['password']);
+
+
+        if (isset(self::$db[$db_connection])) {
+            return self::$db[$db_connection];
+        }
+
+        if (isset($db_config['connections'][$db_connection])) {
+            $dsn = 'mysql:host=' . $db_config['connections'][$db_connection]['host'] . ';dbname=' . $db_config['connections'][$db_connection]['database'] . ';charset=utf8';
+            $db = new PDO($dsn, $db_config['connections'][$db_connection]['username'], $db_config['connections'][$db_connection]['password']);
             // Throw an Exception when an error occurs
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $db->setAttribute(PDO::MYSQL_ATTR_INIT_COMMAND, "SET NAMES utf8;SET time_zone = '+00:00'");
-            self::$db[static::$connection] = $db;
+            self::$db[$db_connection] = $db;
         }
         //TODO:Handle error 
 
 
 
-        return self::$db[static::$connection];
+        return self::$db[$db_connection];
     }
 
 }

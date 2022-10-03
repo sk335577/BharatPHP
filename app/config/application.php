@@ -21,11 +21,13 @@ return array_merge(
             ],
             // 'login_cookie_life'
             //Languages Ends Here
-            'timezone' => 'UTC'
+            'timezone' => 'UTC',
+            'application_key' => 'sdf#$5rdsfcxvfdgf'
         //
         //....
         ],
         require __DIR__ . '/env/' . getenv('APP_ENV') . '.php',
         require __DIR__ . '/services.php',
-        require __DIR__ . '/events.php'
+        require __DIR__ . '/events.php',
+        require __DIR__ . '/session.php'
 );
