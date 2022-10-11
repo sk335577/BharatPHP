@@ -51,7 +51,7 @@ return array(
           | The number of minutes a session can be idle before expiring.
           |
          */
-        'lifetime' => 60,
+        'lifetime' => 5,
         /*
           |--------------------------------------------------------------------------
           | Session Expiration On Close
