@@ -18,6 +18,10 @@ class Router {
      * @param Response $response
      */
     public function __construct(Request $request, Response $response) {
+
+        //Load routes
+        include BharatPHP_ROOT_PATH . '/app/routes/web.php';
+
         $this->request = $request;
         $this->response = $response;
     }

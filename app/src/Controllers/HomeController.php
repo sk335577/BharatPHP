@@ -14,7 +14,6 @@ class HomeController extends Controller {
     public function home() {
         Session::put("xxx", 's');
 
-        
         return response(view('home/index', []));
     }
 

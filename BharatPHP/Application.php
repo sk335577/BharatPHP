@@ -53,6 +53,9 @@ class Application {
                 }
             }
         }
+
+
+   
     }
 
     public function registerRequest(Request $request) {
@@ -119,6 +122,8 @@ class Application {
 
         Session::load();
 
+        date_default_timezone_set(config('timezone'));
+
         $this->events->trigger('before.app.route', array('app' => $this));
 
         try {
@@ -130,6 +135,7 @@ class Application {
         }
 
         Session::save();
+
         $this->response()->send();
 
         $this->events->trigger('after.app.route', array('app' => $this));

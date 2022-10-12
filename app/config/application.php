@@ -17,7 +17,7 @@ return array_merge(
             //Languages Starts Here
             'languages' => [
                 'default' => 'en',
-                'path' => BharatPHP_ROOT_PATH . '/app/lang'
+                'path' => BharatPHP_APP_PATH . '/lang'
             ],
             // 'login_cookie_life'
             //Languages Ends Here
@@ -26,8 +26,8 @@ return array_merge(
         //
         //....
         ],
-        require __DIR__ . '/env/' . getenv('APP_ENV') . '.php',
-        require __DIR__ . '/services.php',
-        require __DIR__ . '/events.php',
-        require __DIR__ . '/session.php'
+        require BharatPHP_APP_CONFIG_PATH . '/env/' . getenv('APP_ENV') . '.php',
+        require BharatPHP_APP_CONFIG_PATH . '/services.php',
+        require BharatPHP_APP_CONFIG_PATH . '/events.php',
+        require BharatPHP_APP_CONFIG_PATH . '/session.php',
 );
