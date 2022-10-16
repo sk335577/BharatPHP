@@ -7,7 +7,6 @@ use BharatPHP\Services;
 use BharatPHP\Events;
 use BharatPHP\Request;
 use BharatPHP\Response;
-use BharatPHP\Config;
 use BharatPHP\Session;
 
 class Application {
@@ -20,11 +19,9 @@ class Application {
     private Events $events;
     private View $view;
 
-    public function __construct($config = array()) {
+    public function __construct() {
 
         self::$app = $this;
-
-        Config::init($config); //Save config in config class        
 
         $this->registerRequest(new Request());
 
@@ -39,23 +36,22 @@ class Application {
         $this->registerEvents(new Events());
 
         // Load services 
-        if (isset($config['services'])) {
-            foreach ($config['services'] as $name => $service) {
+        $services = config('services');
+        if (isset($services) && is_array($services)) {
+            foreach ($services as $name => $service) {
                 $this->services->set($name, $service);
             }
         }
 
         //Load events 
-        if (isset($config['events'])) {
-            foreach ($config['events'] as $event) {
+        $events = config('events');
+        if (isset($events) && is_array($events)) {
+            foreach ($events as $event) {
                 if (isset($event['name']) && isset($event['action'])) {
                     $this->events->on($event['name'], $event['action'], ((isset($event['priority'])) ? $event['priority'] : 0));
                 }
             }
         }
-
-
-   
     }
 
     public function registerRequest(Request $request) {

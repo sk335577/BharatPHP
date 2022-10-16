@@ -22,7 +22,11 @@ return array_merge(
             // 'login_cookie_life'
             //Languages Ends Here
             'timezone' => 'UTC',
-            'application_key' => 'sdf#$5rdsfcxvfdgf'
+            'application_key' => 'sdf#$5rdsfcxvfdgf',
+            'error' => [
+                'detail' => true,
+                'log'=>true
+            ],
         //
         //....
         ],

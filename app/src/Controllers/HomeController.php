@@ -13,7 +13,7 @@ class HomeController extends Controller {
 
     public function home() {
 //        Session::put("xxx", 's');
-        echo t('string');
+        echo tx('string');
         return response(view('home/index', []));
     }
 

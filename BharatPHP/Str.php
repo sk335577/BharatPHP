@@ -78,7 +78,8 @@ class Str {
      * @return string
      */
     public static function upper($value) {
-        return (MB_STRING) ? mb_strtoupper($value, static::encoding()) : strtoupper($value);
+//        return (MB_STRING) ? mb_strtoupper($value, static::encoding()) : strtoupper($value);
+        return strtoupper($value);
     }
 
     /**
