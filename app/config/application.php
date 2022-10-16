@@ -16,7 +16,7 @@ return array_merge(
             ],
             //Languages Starts Here
             'languages' => [
-                'default' => 'en',
+                'language' => 'en',
                 'path' => BharatPHP_APP_PATH . '/lang'
             ],
             // 'login_cookie_life'

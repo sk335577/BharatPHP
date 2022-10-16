@@ -6,31 +6,23 @@ use BharatPHP\Router;
 
 class Translator {
 
-    public static $lang = null;
-    public static $translations = array();
+    public static function t($string) {
 
-    public static function load($config, Router $router) {
+        $application_lang = config('languages.language');
 
-        $route_params = $router->getParams();
-
-        if (isset($route_params['lang'])) {
-            self::$lang = $route_params['lang'];
-        } else {
-            self::$lang = $config['languages']['default'];
+        $current_lang = (app()->request()->getRouteParam('lang'));
+        if (!is_null($current_lang)) {
+            $application_lang = $current_lang;
         }
-        self::$translations = include_once $config['languages']['path'] . '/' . self::$lang . '.php';
-    }
 
-    public static function t($string, $default = '') {
-        if (isset(self::$translations[$string])) {
-            return self::$translations[$string];
-        } else {
-            if (!is_null($default)) {
-                return $default;
-            } else {
-                return $string;
-            }
+        $languages = config('languages');
+
+        if (!isset($languages['loaded'][$application_lang])) {
+            Config::set(['languages' => ['loaded' => [$application_lang => require_once config('languages.path') . '/' . $application_lang . ".php"]]]);
         }
+
+
+        return config("languages.loaded.$application_lang.$string");
     }
 
 }

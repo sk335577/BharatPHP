@@ -2,6 +2,7 @@
 
 use BharatPHP\Config;
 use BharatPHP\Application;
+use BharatPHP\Translator;
 
 function config($path, $default = '') {
     return Config::get($path, $default);
@@ -23,7 +24,7 @@ function view($view, $params = []) {
     return app()->view()->renderView($view, $params);
 }
 
-function app() {
+function app(): Application {
     return Application::app();
 }
 
@@ -76,6 +77,10 @@ function __($key, $replacements = array(), $language = null) {
     return Lang::line($key, $replacements, $language);
 }
 
+function t($string) {
+    return Translator::t($string);
+}
+
 /**
  * Dump the given value and kill the script.
  *
@@ -85,6 +90,13 @@ function __($key, $replacements = array(), $language = null) {
 function dd($value) {
     echo "<pre>";
     var_dump($value);
+    echo "</pre>";
+    die;
+}
+
+function pd($value) {
+    echo "<pre>";
+    print_r($value);
     echo "</pre>";
     die;
 }

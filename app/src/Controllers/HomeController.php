@@ -12,8 +12,8 @@ use BharatPHP\Session;
 class HomeController extends Controller {
 
     public function home() {
-        Session::put("xxx", 's');
-
+//        Session::put("xxx", 's');
+        echo t('string');
         return response(view('home/index', []));
     }
 

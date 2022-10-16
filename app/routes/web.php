@@ -5,6 +5,7 @@ use BharatPHP\Routes;
 
 //Routes::get('/', [App\Controllers\HomeController::class, 'home'])->middleware();
 Routes::get('/', [App\Controllers\HomeController::class, 'home'], ['middleware' => [App\Middleware\VerifyCsrfToken::class]]);
+Routes::get('/{lang}', [App\Controllers\HomeController::class, 'home'], ['middleware' => [App\Middleware\VerifyCsrfToken::class]]);
 // Router::get('/register', [Home::class, 'register']);
 // Router::post('/register', [Home::class, 'register']);
 // Router::get('/login', [Home::class, 'login']);
