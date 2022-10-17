@@ -101,6 +101,12 @@ function pd($value) {
     die;
 }
 
+function pr($value) {
+    echo "<pre>";
+    print_r($value);
+    echo "</pre>";
+}
+
 /**
  * Get an item from an array using "dot" notation.
  *

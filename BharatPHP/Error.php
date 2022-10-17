@@ -83,9 +83,9 @@ class Error {
         // of the exception details for the developer.
         $exception = new \ErrorException($error, $code, 0, $file, $line);
 
-        if (in_array($code, Config::get('error.ignore'))) {
-            return static::log($exception);
-        }
+//        if (in_array($code, Config::get('error.ignore'))) {
+//            return static::log($exception);
+//        }
 
         static::exception($exception);
     }
@@ -116,7 +116,7 @@ class Error {
      */
     public static function log($exception) {
         if (Config::get('error.log')) {
-
+//            call_user_func(Config::get('error.logger'), $exception);
             Log::exception($exception);
         }
     }

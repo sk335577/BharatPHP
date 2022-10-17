@@ -12,8 +12,14 @@ use BharatPHP\Session;
 class HomeController extends Controller {
 
     public function home() {
+//        (Users::createUser(['name' => 'name', 'email' => 'email', 'password' => 'pass']));
+//        pr(Users::getAllUsers());
+//        (Users::updateUserByUserID(2, ['name' => 'name' . time()]));
+//        pr(Users::getAllUsers());
+//        pd(Users::getAllUsersCount());
 //        Session::put("xxx", 's');
-        echo tx('string');
+//        echo t('string');
+        pr(Session::getAll());
         return response(view('home/index', []));
     }
 

@@ -118,17 +118,15 @@ class Application {
 
         Session::load();
 
-        date_default_timezone_set(config('timezone'));
-
         $this->events->trigger('before.app.route', array('app' => $this));
 
-        try {
-            $this->router->resolve();
-        } catch (\Exception $e) {
+//        try {
+        $this->router->resolve();
+//        } catch (\Exception $e) {
 //            print_r($e);
-            $this->response()->setCode(404);
-            $this->response()->setBody(view('errors/404'));
-        }
+//            $this->response()->setCode(404);
+//            $this->response()->setBody(view('errors/404'));
+//        }
 
         Session::save();
 

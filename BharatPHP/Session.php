@@ -73,7 +73,6 @@ class Session {
                 return new Session\Drivers\Cookie;
 
             case 'database':
-//                return new Session\Drivers\Database(Database::connection());
                 return new Session\Drivers\Database(BharatPHPDatabase::getDBConnection());
 
             case 'file':

@@ -38,6 +38,7 @@ class Database {
         }
 
         if (isset($db_config['connections'][$db_connection])) {
+
             $dsn = 'mysql:host=' . $db_config['connections'][$db_connection]['host'] . ';dbname=' . $db_config['connections'][$db_connection]['database'] . ';charset=utf8';
             $db = new PDO($dsn, $db_config['connections'][$db_connection]['username'], $db_config['connections'][$db_connection]['password']);
             // Throw an Exception when an error occurs

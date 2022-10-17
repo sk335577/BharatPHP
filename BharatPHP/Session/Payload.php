@@ -132,6 +132,11 @@ class Payload {
         return value($default);
     }
 
+    public function getAll() {
+        $session = $this->session['data'];
+        return $session;
+    }
+
     /**
      * Write an item to the session.
      *

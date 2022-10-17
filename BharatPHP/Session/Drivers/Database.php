@@ -36,7 +36,7 @@ class Database extends Driver {
      */
     public function load($id) {
 
-        $statement = $this->connection->query('SELECT * FROM ' . $this->table());
+        $statement = $this->connection->query('SELECT * FROM ' . config('session.table'));
         $session = $statement->fetch(PDO::FETCH_OBJ);
 
         if (!is_null($session) && !empty($session)) {
@@ -59,7 +59,7 @@ class Database extends Driver {
     public function save($session, $config, $exists) {
         if ($exists) {
 
-            $statement = $this->connection->prepare(' UPDATE ' . $this->table() . ' set last_activity=:last_activity, data=:data where id=:id ');
+            $statement = $this->connection->prepare(' UPDATE ' . config('session.table') . ' set last_activity=:last_activity, data=:data where id=:id ');
 
             $statement->execute([
                 'id' => $session['id'],
@@ -67,7 +67,7 @@ class Database extends Driver {
                 'data' => serialize($session['data']),
             ]);
         } else {
-            $statement = $this->connection->prepare('INSERT INTO  ' . $this->table() . '  (id,last_activity,data) VALUES (:id,:last_activity,:data)');
+            $statement = $this->connection->prepare('INSERT INTO  ' . config('session.table') . '  (id,last_activity,data) VALUES (:id,:last_activity,:data)');
 
             $statement->execute(array(
                 'id' => $session['id'],
@@ -103,8 +103,7 @@ class Database extends Driver {
      * @return Query
      */
     private function table() {
-//        return $this->connection->table(Config::get('session.table'));
-        return (Config::get('session.table'));
+        return $this->connection->table(config('session.table'));
     }
 
 }
