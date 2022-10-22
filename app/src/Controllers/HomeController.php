@@ -19,7 +19,10 @@ class HomeController extends Controller {
 //        pd(Users::getAllUsersCount());
 //        Session::put("xxx", 's');
 //        echo t('string');
-        pr(Session::getAll());
+//        pr(Session::getAll());
+//        pr(app()->services()->get('browser')->getOs());
+//        echo "xxxxxxx";
+//        pr(app()->services()->get('browser')->getName());
         return response(view('home/index', []));
     }
 

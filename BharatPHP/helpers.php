@@ -3,9 +3,14 @@
 use BharatPHP\Config;
 use BharatPHP\Application;
 use BharatPHP\Translator;
+use BharatPHP\Session;
 
 function config($path, $default = '') {
     return Config::get($path, $default);
+}
+
+function csrfToken() {
+    return Session::token();
 }
 
 function appUrl() {

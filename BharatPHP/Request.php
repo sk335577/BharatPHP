@@ -21,8 +21,46 @@ class Request {
     protected $env = [];
     private array $routeParams = [];
 
+    public function __construct($uri = null, $basePath = null) {
+        $this->setRequestUri($uri, $basePath);
+
+        $this->get = (isset($_GET)) ? $_GET : [];
+        $this->post = (isset($_POST)) ? $_POST : [];
+        $this->files = (isset($_FILES)) ? $_FILES : [];
+        $this->cookie = (isset($_COOKIE)) ? $_COOKIE : [];
+        $this->server = (isset($_SERVER)) ? $_SERVER : [];
+        $this->env = (isset($_ENV)) ? $_ENV : [];
+
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            $this->parseData();
+        }
+
+        // Get any possible request headers
+        if (function_exists('getallheaders')) {
+            $this->headers = getallheaders();
+        } else {
+            foreach ($_SERVER as $key => $value) {
+                if (substr($key, 0, 5) == 'HTTP_') {
+                    $key = ucfirst(strtolower(str_replace('HTTP_', '', $key)));
+                    if (strpos($key, '_') !== false) {
+                        $ary = explode('_', $key);
+                        foreach ($ary as $k => $v) {
+                            $ary[$k] = ucfirst(strtolower($v));
+                        }
+                        $key = implode('-', $ary);
+                    }
+                    $this->headers[$key] = $value;
+                }
+            }
+        }
+    }
+
     public function getMethod() {
         return strtolower($_SERVER['REQUEST_METHOD']);
+    }
+
+    public function getMethodUpperCase() {
+        return strtoupper($_SERVER['REQUEST_METHOD']);
     }
 
     public function getUrl() {
@@ -58,6 +96,19 @@ class Request {
     }
 
     /**
+     * Retrieve an input item from the request.
+     *
+     * @param  string  $key
+     * @param  mixed   $default
+     * @return string|array
+     */
+    public function input($key = null, $default = null) {
+        $input = $this->getBody();
+
+        return array_get($input, $key, $default);
+    }
+
+    /**
      * @param $params
      * @return self
      */
@@ -72,40 +123,6 @@ class Request {
 
     public function getRouteParam($param, $default = null) {
         return $this->routeParams[$param] ?? $default;
-    }
-
-    public function __construct($uri = null, $basePath = null) {
-        $this->setRequestUri($uri, $basePath);
-
-        $this->get = (isset($_GET)) ? $_GET : [];
-        $this->post = (isset($_POST)) ? $_POST : [];
-        $this->files = (isset($_FILES)) ? $_FILES : [];
-        $this->cookie = (isset($_COOKIE)) ? $_COOKIE : [];
-        $this->server = (isset($_SERVER)) ? $_SERVER : [];
-        $this->env = (isset($_ENV)) ? $_ENV : [];
-
-        if (isset($_SERVER['REQUEST_METHOD'])) {
-            $this->parseData();
-        }
-
-        // Get any possible request headers
-        if (function_exists('getallheaders')) {
-            $this->headers = getallheaders();
-        } else {
-            foreach ($_SERVER as $key => $value) {
-                if (substr($key, 0, 5) == 'HTTP_') {
-                    $key = ucfirst(strtolower(str_replace('HTTP_', '', $key)));
-                    if (strpos($key, '_') !== false) {
-                        $ary = explode('_', $key);
-                        foreach ($ary as $k => $v) {
-                            $ary[$k] = ucfirst(strtolower($v));
-                        }
-                        $key = implode('-', $ary);
-                    }
-                    $this->headers[$key] = $value;
-                }
-            }
-        }
     }
 
     public function hasFiles() {
