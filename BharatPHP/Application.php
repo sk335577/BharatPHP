@@ -111,6 +111,15 @@ class Application {
     }
 
     /**
+     * Determine if the application is currently down for maintenance.
+     *
+     * @return bool
+     */
+    public function isDownForMaintenance() {
+        return file_exists($this->storagePath() . '/framework/down');
+    }
+
+    /**
      * 
      */
     public function run() {

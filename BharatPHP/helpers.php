@@ -617,3 +617,20 @@ function get_file_size($size) {
     $units = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB');
     return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $units[$i];
 }
+
+function array_filter_by_key_values(array $arr, array $params) {
+
+    $res = array_filter(
+            $arr,
+            fn($row) => !array_diff_assoc($params, $row)
+    );
+
+    if (count($res)) {
+        $res = array_values($res);
+        if (isset($res[0])) {
+            return $res[0];
+        }
+    }
+
+    return [];
+}
