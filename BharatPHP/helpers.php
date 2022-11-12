@@ -54,9 +54,13 @@ function getCookie($name) {
     return app()->request()->getCookie($name);
 }
 
-function printTemplatePart($part, $viewtype = 'frontend') {
-    echo app()->view()->getTemplatePart($part);
+function printTemplatePart($part, $params = [], $viewtype = 'default') {
+    echo app()->view()->getTemplatePart($part, $params);
 }
+
+//function printTemplatePart($part, $viewtype = 'frontend') {
+//    echo app()->view()->getTemplatePart($part);
+//}
 
 /**
  * Convert HTML characters to entities.
@@ -633,4 +637,13 @@ function array_filter_by_key_values(array $arr, array $params) {
     }
 
     return [];
+}
+
+
+function getRouteParams() {
+    return app()->request()->getRouteParams();
+}
+
+function getRouteParam($param, $default = null) {
+    return app()->request()->getRouteParam($param, $default);
 }

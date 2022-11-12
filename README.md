@@ -87,7 +87,7 @@ Please make sure to update tests as appropriate.
 
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Created by [@Sandeep Kumar](http://sandeepkumarpal.dev/) - feel free to contact me!
 
 
 ## License

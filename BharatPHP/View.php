@@ -34,7 +34,11 @@ class View {
         return str_replace('{{content}}', $viewContent, $layoutContent);
     }
 
-    public function getTemplatePart($part, $viewtype = 'default') {
+    public function getTemplatePart($part, array $params = [], $viewtype = 'default') {
+
+        foreach ($params as $key => $value) {
+            $$key = $value;
+        }
         $template = config('paths.views.' . $viewtype) . '/' . $part . '.phtml';
 
         ob_start();
@@ -42,4 +46,11 @@ class View {
         return ob_get_clean();
     }
 
+//    public function getTemplatePart($part, $viewtype = 'default') {
+//        $template = config('paths.views.' . $viewtype) . '/' . $part . '.phtml';
+//
+//        ob_start();
+//        include_once $template;
+//        return ob_get_clean();
+//    }
 }
