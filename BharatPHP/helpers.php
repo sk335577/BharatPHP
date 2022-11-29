@@ -8,7 +8,9 @@ use BharatPHP\Session;
 function config($path, $default = '') {
     return Config::get($path, $default);
 }
-
+function request() {
+    return app()->request();
+}
 function csrfToken() {
     return Session::token();
 }
@@ -25,12 +27,28 @@ function getTemplatePart($part, $viewtype = 'frontend') {
     return app()->view()->getTemplatePart($part);
 }
 
-function view($view, $params = []) {
-    return app()->view()->renderView($view, $params);
+function injectTemplate($position, $template, $viewtype = 'default') {
+    return app()->view()->injectTemplate($position, $template,$viewtype);
+}
+function printInjectedTemplates($position,) {
+    return app()->view()->printInjectedTemplates($position);
+}
+
+
+function view($view, $params = [], $layout = 'layouts/default', $viewtype = 'default') {
+    return app()->view()->renderView($view, $params, $layout, $viewtype);
+}
+
+function viewWithoutLayout($view, $params = [], $viewtype = 'default') {
+    return app()->view()->renderViewOnly($view, $params, $viewtype);
 }
 
 function app(): Application {
     return Application::app();
+}
+
+function routeNameToURL($route_name, $route_params = []) {
+    return \BharatPHP\Routes::routeNameToURL($route_name, $route_params);
 }
 
 function json($data, $http_code = 200) {
@@ -638,7 +656,6 @@ function array_filter_by_key_values(array $arr, array $params) {
 
     return [];
 }
-
 
 function getRouteParams() {
     return app()->request()->getRouteParams();

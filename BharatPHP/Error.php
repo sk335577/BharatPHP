@@ -49,8 +49,21 @@ class Error {
         // system to get the response that should be sent to the browser.
         // Using events gives the developer more freedom.
         else {
-            $response = app()->events()->trigger('500', array($exception));
-            app()->response()->setBody($response);
+
+            if (config('paths.views.500')) {
+                $error_view_info = config('paths.views.500');
+
+                app()->response()->setCode(500);
+                app()->response()->setBody(view($error_view_info['path'], $error_view_info['params'], $error_view_info['layout']));
+//                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+            } else {
+                $response = app()->events()->trigger('500', array($exception));
+                app()->response()->setBody($response);
+            }
+
+            //
+//            app()->response()->setCode(500);
+//            app()->response()->setBody(view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']));
 //            app()->response()->setCode(500);
 //            $response = Event::first('500', array($exception));
 //            app()->response()->setBody($response);

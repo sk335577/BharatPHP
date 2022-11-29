@@ -17,9 +17,9 @@ class Config {
 
     public static function get($path, $default = '') {
 
-        if (isset(self::$config_cache[$path])) {
-            return self::$config_cache[$path];
-        }
+//        if (isset(self::$config_cache[$path])) {
+//            return self::$config_cache[$path];
+//        }
 
         $paths = explode('.', $path);
 

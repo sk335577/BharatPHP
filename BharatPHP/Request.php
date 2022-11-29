@@ -168,7 +168,17 @@ class Request {
     }
 
     public function isSecure() {
-        return (isset($this->server['HTTPS']) || (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')));
+
+
+        $isSecure = false;
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+            $isSecure = true;
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+            $isSecure = true;
+        }
+        return $isSecure;
+
+//        return (isset($this->server['HTTPS']) || (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')));
     }
 
     public function getBasePath() {
@@ -245,9 +255,24 @@ class Request {
         return $this->getScheme() . '://' . $this->getHost();
     }
 
+//    public function appUrl() {
+//        if (isset($_SERVER['HTTPS'])) {
+//            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+//        } else {
+//            $protocol = 'http';
+//        }
+//        // return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+//        return $protocol . "://" . $_SERVER['HTTP_HOST'];
+//    }
+
     public function appUrl() {
-        if (isset($_SERVER['HTTPS'])) {
-            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+//        if (isset($_SERVER['HTTPS'])) {
+//            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+//        } else {
+//            $protocol = 'http';
+//        }
+        if ($this->isSecure()) {
+            $protocol = 'https';
         } else {
             $protocol = 'http';
         }
@@ -485,7 +510,10 @@ class Request {
             $this->parsedData = json_decode(json_encode((array) simplexml_load_string($this->rawData)), true);
             // Else, default to a regular URL-encoded string
         } else {
-            parse_str($this->rawData, $this->parsedData);
+//            parse_str($this->rawData, $this->parsedData);
+            if (!is_null($this->rawData)) {
+                parse_str($this->rawData, $this->parsedData);
+            }
 
             switch (strtoupper($this->getMethod())) {
                 case 'GET':

@@ -21,6 +21,27 @@ class Routes {
         
     }
 
+    public static function routeNameToURL($route_name, $route_params = []) {
+        $route_name = trim($route_name);
+
+        $r = (self::getInstance()->routeMap);
+        foreach ($r as $route_type => $routes) {
+            foreach ($routes as $route_url => $route_info) {
+
+                if (isset($route_info['options']) && isset($route_info['options']['name']) && trim($route_info['options']['name']) == $route_name) {
+
+                    $r = appUrl() . ($route_url);
+                    foreach ($route_params as $route_param_k => $route_param_v) {
+                        $r = str_ireplace('{' . $route_param_k . '}', $route_param_v, $r);
+                    }
+
+                    return $r;
+                }
+            }
+        }
+        return "/";
+    }
+
     /**
      * get
      * 

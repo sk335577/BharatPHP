@@ -4,6 +4,7 @@ namespace BharatPHP;
 
 use BharatPHP\Exception\NotFoundException;
 use BharatPHP\Routes;
+use BharatPHP\Translator;
 
 class Router {
 
@@ -69,7 +70,8 @@ class Router {
                 $routeParams = array_combine($routeNames, $values);
 
                 $this->request->setRouteParams($routeParams);
-                return $callback['callback'];
+//                return $callback['callback'];
+                return $callback;
             }
         }
 
@@ -86,14 +88,37 @@ class Router {
         $current_route_info = $method_routes[$url] ?? false;
 
         $callback = isset($current_route_info['callback']) ? $current_route_info['callback'] : false;
+        $route_options = isset($current_route_info['options']) ? $current_route_info['options'] : false;
 
         if (!$callback) {
-            $callback = $this->getCallback();
+            $callback_data = $this->getCallback();
+
+            if (isset($callback_data['callback'])) {
+                $callback = $callback_data['callback'];
+            } else {
+                $callback = false;
+            }
+
+
+            if (isset($callback_data['options'])) {
+                $route_options = $callback_data['options'];
+            }
+
             if ($callback === false) {
-                throw new NotFoundException();
+                Translator::init();
+                if (config('paths.views.404')) {
+                    $error_404_view = config('paths.views.404');
+
+//                    return $this->renderView($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+                    app()->response()->setCode(404);
+                    return app()->response()->setBody(view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']));
+//                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+                } else {
+                    throw new NotFoundException();
+                }
             }
         }
-
+        Translator::init();
         if (is_string($callback)) {
             return $this->renderView($callback);
         }
@@ -106,18 +131,22 @@ class Router {
 
             app()->controller = $controller;
 
-            if (isset($current_route_info['options']['middleware'])) {
+            if (isset($route_options['middleware'])) {
 //                $middlewares = $controller->getMiddlewares();
-                $middlewares = $current_route_info['options']['middleware'];
-                $middleware_response = null;
+                $middlewares = $route_options['middleware'];
+                $middleware_response_set = false;
 
                 foreach ($middlewares as $middleware) {
                     $middleware = new $middleware;
                     $middleware_response = $middleware->execute($this->request, $this->response);
+                    if (!is_null($middleware_response)) {
+                        $middleware_response_set = true;
+                    }
                 }
 
-                if (!is_null($middleware_response)) {
-                    return $middleware_response;
+
+                if ($middleware_response_set) {
+                    return;
                 }
             }
 
@@ -130,11 +159,12 @@ class Router {
     }
 
     public function renderView($view, $params = []) {
-        return view()->renderView($view, $params);
+//        return view()->renderView($view, $params);
+        return view($view, $params);
     }
 
     public function renderViewOnly($view, $params = []) {
-        return view()->renderViewOnly($view, $params);
+        return viewWithoutLayout($view, $params);
     }
 
 }

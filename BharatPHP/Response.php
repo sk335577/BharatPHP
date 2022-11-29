@@ -549,8 +549,16 @@ class Response {
 
         // cookies
         if (!empty(Cookie::$jar)) {
+
             foreach (Cookie::$jar as $cookie) {
 //                setcookie($cookie['name'], $cookie['value'], $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+
+                if (is_null($cookie['secure'])) {
+                    $cookie['secure'] = false;
+                }
+                if (is_null($cookie['domain'])) {
+                    $cookie['domain'] = '';
+                }
                 setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure']);
             }
         }

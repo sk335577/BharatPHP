@@ -16,7 +16,8 @@ return array_merge(
             ],
             //Languages Starts Here
             'languages' => [
-                'language' => 'en',
+                'language' => 'en', 
+                'languages_allowed' => ['en', "fr"],
                 'path' => BharatPHP_APP_PATH . '/lang'
             ],
             // 'login_cookie_life'
@@ -25,7 +26,7 @@ return array_merge(
             'application_key' => 'sdf#$5rdsfcxvfdgf',
             'error' => [
                 'detail' => true,
-                'log'=>true
+                'log' => true
             ],
         //
         //....

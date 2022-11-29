@@ -27,9 +27,11 @@
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
+- PHP 8.0
+- Composer
+- HTML
+- CSS
+- Javascript/Jquery
 
 
 ## Features

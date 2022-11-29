@@ -11,6 +11,8 @@ class View {
     protected $viewtype = 'default';
     protected $layout = 'default';
     public string $page_title = '';
+    protected $params = [];
+    protected $injected_templates = [];
 
     public function renderViewOnly($view, array $params, $viewtype = 'default') {
         foreach ($params as $key => $value) {
@@ -23,7 +25,7 @@ class View {
     }
 
     public function renderView($view, array $params, $layout = 'layouts/default', $viewtype = 'default') {
-
+        $this->params = array_merge($this->params, $params);
         $layout = config('paths.views.' . $viewtype) . '/' . $layout . '.phtml';
         $viewContent = $this->renderViewOnly($view, $params, $viewtype);
 
@@ -36,6 +38,10 @@ class View {
 
     public function getTemplatePart($part, array $params = [], $viewtype = 'default') {
 
+        foreach ($this->params as $key => $value) {
+            $$key = $value;
+        }
+
         foreach ($params as $key => $value) {
             $$key = $value;
         }
@@ -44,6 +50,24 @@ class View {
         ob_start();
         include_once $template;
         return ob_get_clean();
+    }
+
+    public function injectTemplate($position, $template, $viewtype = 'default') {
+        if (!isset($this->injected_templates[$position])) {
+            $this->injected_templates[$position] = [];
+        }
+        $this->injected_templates[$position][] = $viewtype . "/" . $template;
+    }
+
+    public function printInjectedTemplates($position) {
+
+        if (isset($this->injected_templates[$position])) {
+            foreach ($this->injected_templates[$position] as $t) {
+                if (is_file(BharatPHP_VIEW_PATH . "/" . $t . ".phtml")) {
+                    include_once BharatPHP_VIEW_PATH . "/" . $t . ".phtml";
+                }
+            }
+        }
     }
 
 //    public function getTemplatePart($part, $viewtype = 'default') {

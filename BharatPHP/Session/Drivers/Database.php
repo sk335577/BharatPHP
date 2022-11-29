@@ -36,7 +36,7 @@ class Database extends Driver {
      */
     public function load($id) {
 
-        $statement = $this->connection->query('SELECT * FROM ' . config('session.table'));
+        $statement = $this->connection->query('SELECT * FROM ' . config('session.table') . ' WHERE id="' . $id . '"');
         $session = $statement->fetch(PDO::FETCH_OBJ);
 
         if (!is_null($session) && !empty($session)) {

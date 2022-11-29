@@ -125,7 +125,9 @@ class Application {
     public function run() {
 
 
-        Session::load();
+        if (config('session.driver') != '') {
+            Session::load();
+        }
 
         $this->events->trigger('before.app.route', array('app' => $this));
 
@@ -137,7 +139,9 @@ class Application {
 //            $this->response()->setBody(view('errors/404'));
 //        }
 
-        Session::save();
+        if (config('session.driver') != '') {
+            Session::save();
+        }
 
         $this->response()->send();
 
