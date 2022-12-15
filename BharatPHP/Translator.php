@@ -11,6 +11,7 @@ class Translator {
         $application_lang = Config::get('languages.language');
 
         $current_lang = (app()->request()->getRouteParam('lang'));
+
         if (!is_null($current_lang)) {
             $application_lang = $current_lang;
         }

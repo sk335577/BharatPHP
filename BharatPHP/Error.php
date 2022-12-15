@@ -21,7 +21,7 @@ class Error {
 
         $message = $exception->getMessage();
 
-        // For Laravel view errors we want to show a prettier error:
+        // For BharatPHP view errors we want to show a prettier error:
         $file = $exception->getFile();
 
         // If detailed errors are enabled, we'll just format the exception into

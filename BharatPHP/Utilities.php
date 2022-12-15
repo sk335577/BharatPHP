@@ -1,5 +1,7 @@
 <?php
 
+namespace BharatPHP;
+
 class Utilities {
 
     public static function encrypt($string, $key = 5) {

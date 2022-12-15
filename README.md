@@ -35,10 +35,20 @@
 
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
+Here are the framework features
+- MVC
+- Lightweight
+- Dynamic Routing
+- Services Manager
+- Events Manager
+- Translations Manager
+- Database Utilities: A mysql wrapper library added to generate quick sql queries
+- Configuration Manager: To access configuration from anywhere in project life cycle
+- Simple Array Language Translations: Add any numbers of languages
+- Simple .phtml templating engine, but can be used with any templating engine like twig, smarty etc
+- Extendable: Can be use to develop large applications
+- A Demo Attached: A portfolio website(with bootstrap css framework) will be generated
+- Use any php package from packagist.org by using composer 
 
 
 ## Screenshots

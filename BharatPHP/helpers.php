@@ -5,12 +5,18 @@ use BharatPHP\Application;
 use BharatPHP\Translator;
 use BharatPHP\Session;
 
+function setConfig($path, $value) {
+    Config::setConfig($path, $value);
+}
+
 function config($path, $default = '') {
     return Config::get($path, $default);
 }
+
 function request() {
     return app()->request();
 }
+
 function csrfToken() {
     return Session::token();
 }
@@ -27,19 +33,19 @@ function getTemplatePart($part, $viewtype = 'frontend') {
     return app()->view()->getTemplatePart($part);
 }
 
-function injectTemplate($position, $template, $viewtype = 'default') {
-    return app()->view()->injectTemplate($position, $template,$viewtype);
+function injectTemplate($position, $template, $viewtype = 'frontend') {
+    return app()->view()->injectTemplate($position, $template, $viewtype);
 }
+
 function printInjectedTemplates($position,) {
     return app()->view()->printInjectedTemplates($position);
 }
 
-
-function view($view, $params = [], $layout = 'layouts/default', $viewtype = 'default') {
+function view($view, $params = [], $layout = 'layouts/default', $viewtype = 'frontend') {
     return app()->view()->renderView($view, $params, $layout, $viewtype);
 }
 
-function viewWithoutLayout($view, $params = [], $viewtype = 'default') {
+function viewWithoutLayout($view, $params = [], $viewtype = 'frontend') {
     return app()->view()->renderViewOnly($view, $params, $viewtype);
 }
 
@@ -72,7 +78,7 @@ function getCookie($name) {
     return app()->request()->getCookie($name);
 }
 
-function printTemplatePart($part, $params = [], $viewtype = 'default') {
+function printTemplatePart($part, $params = [], $viewtype = 'frontend') {
     echo app()->view()->getTemplatePart($part, $params);
 }
 

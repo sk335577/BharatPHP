@@ -12,6 +12,8 @@ use BharatPHP\Session;
 class HomeController extends Controller {
 
     public function home() {
+//        Config::setConfig('database.connections.mysql.','ddd');
+//        pd(Config::getAll());die;
 //        (Users::createUser(['name' => 'name', 'email' => 'email', 'password' => 'pass']));
 //        pr(Users::getAllUsers());
 //        (Users::updateUserByUserID(2, ['name' => 'name' . time()]));

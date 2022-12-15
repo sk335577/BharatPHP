@@ -15,6 +15,16 @@ class Config {
         self::$config = array_merge(self::$config, $data);
     }
 
+    public static function setConfig($path, $value) {
+
+        $loc = &self::$config;
+
+        foreach (explode('.', $path) as $step) {
+            $loc = &$loc[$step];
+        }
+        return $loc = $value;
+    }
+
     public static function get($path, $default = '') {
 
 //        if (isset(self::$config_cache[$path])) {
@@ -38,7 +48,7 @@ class Config {
         if (empty($result)) {
             return $default;
         }
-        self::$config_cache[$path] = $result;
+//        self::$config_cache[$path] = $result;
 
         return $result;
     }

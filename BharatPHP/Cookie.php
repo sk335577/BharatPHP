@@ -66,10 +66,10 @@ class Cookie {
      *
      * <code>
      * 		// Set the value of the "favorite" cookie
-     * 		Cookie::put('favorite', 'Laravel');
+     * 		Cookie::put('favorite', 'BharatPHP');
      *
      * 		// Set the value of the "favorite" cookie for twenty minutes
-     * 		Cookie::put('favorite', 'Laravel', 20);
+     * 		Cookie::put('favorite', 'BharatPHP', 20);
      * </code>
      *
      * @param  string  $name

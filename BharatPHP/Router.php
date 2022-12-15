@@ -105,8 +105,11 @@ class Router {
             }
 
             if ($callback === false) {
+
                 Translator::init();
+
                 if (config('paths.views.404')) {
+
                     $error_404_view = config('paths.views.404');
 
 //                    return $this->renderView($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
@@ -118,7 +121,10 @@ class Router {
                 }
             }
         }
+
+
         Translator::init();
+
         if (is_string($callback)) {
             return $this->renderView($callback);
         }
