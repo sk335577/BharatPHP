@@ -81,5 +81,6 @@ return array_replace_recursive(
         require BharatPHP_APP_CONFIG_PATH . '/events.php',
         require BharatPHP_APP_CONFIG_PATH . '/session.php',
         require BharatPHP_APP_CONFIG_PATH . '/languages.php',
+        require BharatPHP_APP_CONFIG_PATH . '/error.php',
         require BharatPHP_APP_CONFIG_PATH . '/mail.php',
 );

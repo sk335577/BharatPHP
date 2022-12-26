@@ -39,7 +39,7 @@ class Cookie {
      * 		$favorite = Cookie::get('favorite');
      *
      * 		// Get the value of a cookie or return a default value
-     * 		$favorite = Cookie::get('framework', 'Laravel');
+     * 		$favorite = Cookie::get('framework', 'BharatPHP');
      * </code>
      *
      * @param  string  $name

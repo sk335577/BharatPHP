@@ -116,7 +116,7 @@ class Application {
      * @return bool
      */
     public function isDownForMaintenance() {
-        return file_exists($this->storagePath() . '/framework/down');
+        return file_exists(BharatPHP_STORAGE_PATH . '/framework/down');
     }
 
     /**

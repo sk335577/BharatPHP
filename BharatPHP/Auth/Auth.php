@@ -4,6 +4,7 @@ namespace BharatPHP\Auth;
 
 use BharatPHP\Config;
 use BharatPHP\Session;
+use BharatPHP\Events;
 
 class Auth {
 
