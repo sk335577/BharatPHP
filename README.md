@@ -86,10 +86,11 @@ To do:
 
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by...
-- This project was based on [this tutorial](https://www.example.com).
-- Many thanks to...
+The project is based and inspired by the following frameworks 
+- [POP PHP Framework](https://github.com/popphp/popphp).
+- [Laravel](https://github.com/laravel/laravel/tree/3.0).
+- [thecodeholic](https://github.com/thecodeholic/php-mvc-framework).
+
 
 
 ## Contributing

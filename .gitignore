@@ -5,3 +5,4 @@
 /app/config/env/staging.php
 /app/config/env/local.php
 /app/config/env/local.env
+/public/.htaccess
