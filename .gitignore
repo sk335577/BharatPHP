@@ -4,3 +4,4 @@
 /app/config/env/production.php
 /app/config/env/staging.php
 /app/config/env/local.php
+/app/config/env/local.env

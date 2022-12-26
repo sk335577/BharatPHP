@@ -108,9 +108,9 @@ class Router {
 
                 Translator::init();
 
-                if (config('paths.views.404')) {
+                if (config('views.404')) {
 
-                    $error_404_view = config('paths.views.404');
+                    $error_404_view = config('views.404');
 
 //                    return $this->renderView($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
                     app()->response()->setCode(404);

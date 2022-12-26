@@ -19,12 +19,13 @@ class HomeController extends Controller {
 //        (Users::updateUserByUserID(2, ['name' => 'name' . time()]));
 //        pr(Users::getAllUsers());
 //        pd(Users::getAllUsersCount());
-        Session::put("xxx", 's');
+//        Session::put("xxx", 's');
 //        echo t('string');
 //        pr(Session::getAll());
 //        pr(app()->services()->get('browser')->getOs());
 //        echo "xxxxxxx";
 //        pr(app()->services()->get('browser')->getName());
+//        pr(config());   
         return response(view('home/index', []));
     }
 

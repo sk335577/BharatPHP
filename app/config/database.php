@@ -55,12 +55,12 @@ return [
          */
         'connections' => [
             'mysql' => [
-                'driver' => 'mysql',
-                'host' => 'localhost',
-                'database' => '',
-                'username' => '',
-                'port' => 3306,
-                'password' => '',
+                'driver' => envConfig('DATABASE_DRIVER', 'mysql'),
+                'host' => envConfig('DATABASE_HOST', 'localhost'),
+                'database' => envConfig('DATABASE_NAME', ''),
+                'username' => envConfig('DATABASE_USER', ''),
+                'port' => envConfig('DATABASE_PORT', 3306),
+                'password' => envConfig('DATABASE_PASSWORD', ''),
             // 'charset' => 'utf8',
             ],
             'mysql2' => [

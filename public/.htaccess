@@ -1,4 +1,7 @@
-SetEnv APP_ENV local
+
+#Load configuration app/config/env/example.env
+SetEnv APP_ENV example 
+
 <IfModule mod_rewrite.c>
 RewriteEngine  On
 RewriteCond  %{REQUEST_FILENAME}  -s  [OR]

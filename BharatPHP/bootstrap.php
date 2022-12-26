@@ -5,6 +5,8 @@ use BharatPHP\Config;
 
 require_once BharatPHP_ROOT_PATH . '/BharatPHP/autoloader.php';
 
+Config::loadEnvConfig(BharatPHP_APP_CONFIG_PATH . "/env/" . getenv('APP_ENV') . ".env"); //Save config in config class     
+
 Config::init(include BharatPHP_ROOT_PATH . '/app/config/application.php'); //Save config in config class     
 
 date_default_timezone_set(config('timezone'));

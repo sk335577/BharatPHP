@@ -2,14 +2,8 @@
 
 return array_replace_recursive(
         [
-            'app_title' => 'Title Here',
+            'app_title' => envConfig('APP_TITLE', 'BharatPHP'),
             'paths' => [
-                'views' => [
-                    'frontend' => BharatPHP_VIEW_PATH . '/frontend',
-                    'backend' => BharatPHP_VIEW_PATH . '/backend',
-                    '404' => ['path' => 'errors/404', 'params' => ['page_title' => 'Error'], 'layout' => 'layouts/default'],
-                    '500' => ['path' => 'errors/500', 'params' => ['page_title' => 'Error'], 'layout' => 'layouts/default'],
-                ],
             ],
             /*
               |--------------------------------------------------------------------------
@@ -22,7 +16,7 @@ return array_replace_recursive(
               | characters of random gibberish.
               |
              */
-            'application_key' => '',
+            'application_key' => envConfig('APP_KEY', 'BharatPHP'),
             /*
               |--------------------------------------------------------------------------
               | Application URL
@@ -80,6 +74,7 @@ return array_replace_recursive(
              */
             'timezone' => 'UTC',
         ],
+        require BharatPHP_APP_CONFIG_PATH . '/views.php',
         require BharatPHP_APP_CONFIG_PATH . '/auth.php',
         require BharatPHP_APP_CONFIG_PATH . '/database.php',
         require BharatPHP_APP_CONFIG_PATH . '/services.php',
@@ -87,5 +82,4 @@ return array_replace_recursive(
         require BharatPHP_APP_CONFIG_PATH . '/session.php',
         require BharatPHP_APP_CONFIG_PATH . '/languages.php',
         require BharatPHP_APP_CONFIG_PATH . '/mail.php',
-        require BharatPHP_APP_CONFIG_PATH . '/env/' . getenv('APP_ENV') . '.php',
 );

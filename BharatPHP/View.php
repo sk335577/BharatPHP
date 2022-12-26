@@ -26,7 +26,7 @@ class View {
 
     public function renderView($view, array $params, $layout = 'layouts/default', $viewtype = 'frontend') {
         $this->params = array_merge($this->params, $params);
-        $layout = config('paths.views.' . $viewtype) . '/' . $layout . '.phtml';
+        $layout = config('views.' . $viewtype) . '/' . $layout . '.phtml';
         $viewContent = $this->renderViewOnly($view, $params, $viewtype);
 
         ob_start();
@@ -45,7 +45,7 @@ class View {
         foreach ($params as $key => $value) {
             $$key = $value;
         }
-        $template = config('paths.views.' . $viewtype) . '/' . $part . '.phtml';
+        $template = config('views.' . $viewtype) . '/' . $part . '.phtml';
 
         ob_start();
         include_once $template;
@@ -71,7 +71,7 @@ class View {
     }
 
 //    public function getTemplatePart($part, $viewtype = 'default') {
-//        $template = config('paths.views.' . $viewtype) . '/' . $part . '.phtml';
+//        $template = config('views.' . $viewtype) . '/' . $part . '.phtml';
 //
 //        ob_start();
 //        include_once $template;

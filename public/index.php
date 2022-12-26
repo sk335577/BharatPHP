@@ -11,7 +11,7 @@ define("BharatPHP_APP_CONFIG_PATH", BharatPHP_ROOT_PATH . "/app/config");
 define("BharatPHP_DATA_PATH", BharatPHP_ROOT_PATH . "/data");
 
 if (getenv('APP_ENV') === false) {
-    putenv('APP_ENV=local');
+    putenv('APP_ENV=example');
 }
 
 require_once BharatPHP_ROOT_PATH . '/BharatPHP/bootstrap.php';

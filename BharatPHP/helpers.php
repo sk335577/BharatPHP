@@ -4,13 +4,18 @@ use BharatPHP\Config;
 use BharatPHP\Application;
 use BharatPHP\Translator;
 use BharatPHP\Session;
+use BharatPHP\HTML;
 
 function setConfig($path, $value) {
     Config::setConfig($path, $value);
 }
 
-function config($path, $default = '') {
+function config($path = '', $default = '') {
     return Config::get($path, $default);
+}
+
+function envConfig($config_name = '', $default = '') {
+    return Config::envConfig($config_name, $default);
 }
 
 function request() {
@@ -62,7 +67,7 @@ function json($data, $http_code = 200) {
     app()->response()->setHeader('Content-Type', 'application/json');
     app()->response()->setCode($http_code);
 
-    app()->response()->setBody($data);
+    app()->response()->setBody(json_encode($data));
     return app()->response();
 }
 
@@ -98,18 +103,6 @@ function e($value) {
     return HTML::entities($value);
 }
 
-/**
- * Retrieve a language line.
- *
- * @param  string  $key
- * @param  array   $replacements
- * @param  string  $language
- * @return string
- */
-function __($key, $replacements = array(), $language = null) {
-    return Lang::line($key, $replacements, $language);
-}
-
 function t($string) {
     return Translator::t($string);
 }
@@ -120,7 +113,7 @@ function t($string) {
  * @param  mixed  $value
  * @return void
  */
-function dd($value) {
+function vd($value) {
     echo "<pre>";
     var_dump($value);
     echo "</pre>";
@@ -354,22 +347,6 @@ function array_except($array, $keys) {
 }
 
 /**
- * Transform Eloquent models to a JSON object.
- *
- * @param  Eloquent|array  $models
- * @return object
- */
-function eloquent_to_json($models) {
-    if ($models instanceof Laravel\Database\Eloquent\Model) {
-        return json_encode($models->to_array());
-    }
-
-    return json_encode(array_map(function ($m) {
-                return $m->to_array();
-            }, $models));
-}
-
-/**
  * Determine if "Magic Quotes" are enabled on the server.
  *
  * @return bool
@@ -575,64 +552,6 @@ function with($object) {
  */
 function has_php($version) {
     return version_compare(PHP_VERSION, $version) >= 0;
-}
-
-/**
- * Get a view instance.
- *
- * @param  string  $view
- * @param  array   $data
- * @return View
- */
-//function view($view, $data = array()) {
-//    if (is_null($view))
-//        return '';
-//
-//    return View::make($view, $data);
-//}
-
-/**
- * Render the given view.
- *
- * @param  string  $view
- * @param  array   $data
- * @return string
- */
-//function render($view, $data = array()) {
-//    if (is_null($view))
-//        return '';
-//
-//    return View::make($view, $data)->render();
-//}
-
-/**
- * Get the rendered contents of a partial from a loop.
- *
- * @param  string  $partial
- * @param  array   $data
- * @param  string  $iterator
- * @param  string  $empty
- * @return string
- */
-function render_each($partial, array $data, $iterator, $empty = 'raw|') {
-    return View::render_each($partial, $data, $iterator, $empty);
-}
-
-/**
- * Get a CLI option from the argv $_SERVER variable.
- *
- * @param  string  $option
- * @param  mixed   $default
- * @return string
- */
-function get_cli_option($option, $default = null) {
-    foreach (Laravel\Request::foundation()->server->get('argv') as $argument) {
-        if (starts_with($argument, "--{$option}=")) {
-            return substr($argument, strlen($option) + 3);
-        }
-    }
-
-    return value($default);
 }
 
 /**

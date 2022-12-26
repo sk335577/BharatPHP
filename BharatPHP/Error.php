@@ -50,8 +50,8 @@ class Error {
         // Using events gives the developer more freedom.
         else {
 
-            if (config('paths.views.500')) {
-                $error_view_info = config('paths.views.500');
+            if (config('views.500')) {
+                $error_view_info = config('views.500');
 
                 app()->response()->setCode(500);
                 app()->response()->setBody(view($error_view_info['path'], $error_view_info['params'], $error_view_info['layout']));
