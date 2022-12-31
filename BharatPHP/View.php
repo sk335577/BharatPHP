@@ -26,6 +26,11 @@ class View {
 
     public function renderView($view, array $params, $layout = 'layouts/default', $viewtype = 'frontend') {
         $this->params = array_merge($this->params, $params);
+
+        foreach ($this->params as $key => $value) {
+            $$key = $value;
+        }
+
         $layout = config('views.' . $viewtype) . '/' . $layout . '.phtml';
         $viewContent = $this->renderViewOnly($view, $params, $viewtype);
 
@@ -59,15 +64,29 @@ class View {
         $this->injected_templates[$position][] = $viewtype . "/" . $template;
     }
 
-    public function printInjectedTemplates($position) {
-
+//    public function printInjectedTemplates($position) {
+//
+//        if (isset($this->injected_templates[$position])) {
+//            foreach ($this->injected_templates[$position] as $t) {
+//                if (is_file(BharatPHP_VIEW_PATH . "/" . $t . ".phtml")) {
+//                    include_once BharatPHP_VIEW_PATH . "/" . $t . ".phtml";
+//                }
+//            }
+//        }
+//    }
+//    
+    
+        public function printInjectedTemplates($position) {
+        $is_template_printed = false;
         if (isset($this->injected_templates[$position])) {
             foreach ($this->injected_templates[$position] as $t) {
                 if (is_file(BharatPHP_VIEW_PATH . "/" . $t . ".phtml")) {
+                    $is_template_printed = true;
                     include_once BharatPHP_VIEW_PATH . "/" . $t . ".phtml";
                 }
             }
         }
+        return $is_template_printed;
     }
 
 //    public function getTemplatePart($part, $viewtype = 'default') {

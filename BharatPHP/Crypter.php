@@ -27,6 +27,16 @@ class Crypter {
      *
      * @var int
      */
+
+    /**
+     * Get the IV size for the cipher.
+     *
+     * @return int
+     */
+    public static function getIvSize() {
+        return 16;
+    }
+
     public static $block = 32;
 
     /**
@@ -38,13 +48,41 @@ class Crypter {
      * @return string
      */
     public static function encrypt($value) {
-        $iv = mcrypt_create_iv(static::iv_size(), static::randomizer());
+//        $iv = mcrypt_create_iv(static::iv_size(), static::randomizer());
+        $iv = random_bytes(static::getIvSize());
 
-        $value = static::pad($value);
+        $value = \openssl_encrypt(serialize($value), static::$cipher, static::key(), 0, $iv);
 
-        $value = mcrypt_encrypt(static::$cipher, static::key(), $value, static::$mode, $iv);
+        if ($value === false) {
+            throw new EncryptException('Could not encrypt the data.');
+        }
+
+        // Once we have the encrypted value we will go ahead base64_encode the input
+        // vector and create the MAC for the encrypted value so we can verify its
+        // authenticity. Then, we'll JSON encode the data in a "payload" array.
+        $mac = self::hash($iv = base64_encode($iv), $value);
+
+        $json = json_encode(compact('iv', 'value', 'mac'));
+
+        if (!is_string($json)) {
+            throw new EncryptException('Could not encrypt the data.');
+        }
+
+//        $value = static::pad($value);
+//        $value = mcrypt_encrypt(static::$cipher, static::key(), $value, static::$mode, $iv);
 
         return base64_encode($iv . $value);
+    }
+
+    /**
+     * Create a MAC for the given value.
+     *
+     * @param  string  $iv
+     * @param  string  $value
+     * @return string
+     */
+    public static function hash($iv, $value) {
+        return hash_hmac('sha256', $iv . $value, config('key'));
     }
 
     /**

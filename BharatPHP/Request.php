@@ -71,6 +71,11 @@ class Request {
         }
         return $path;
     }
+    
+        
+        public function getFullBrowserURL() {
+        return $this->appUrl()."".$this->getUrl();
+    }
 
     public function isGet() {
         return $this->getMethod() === 'get';

@@ -10,6 +10,19 @@ function setConfig($path, $value) {
     Config::setConfig($path, $value);
 }
 
+
+function printFullWebRequestURL() {
+    echo request()->getFullBrowserURL();
+}
+
+function printAppTitleTag($title, $add_app_name = true, $app_seperator = " - ") {
+    $title = trim($title);
+    if ($add_app_name) {
+        $title .= " $app_seperator " . config('app_title');
+    }
+    echo "<title>$title</title>";
+}
+
 function config($path = '', $default = '') {
     return Config::get($path, $default);
 }
