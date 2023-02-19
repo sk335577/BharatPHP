@@ -19,11 +19,9 @@
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+- BharatPHP is a web framework built in PHP programming language. 
+- BharatPHP is a developer friendly framework which provides more control to a developer. 
+- BharatPHP provides a MVC approach to build web based applications. 
 
 
 ## Technologies Used
