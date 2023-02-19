@@ -27,7 +27,7 @@ return array_replace_recursive(
               | of your application.
               |
              */
-            'url' => '',
+            'url' => envConfig('APP_URL'),
             /*
               |--------------------------------------------------------------------------
               | Asset URL
@@ -38,7 +38,7 @@ return array_replace_recursive(
               | is not set, we'll default to the application URL above.
               |
              */
-            'asset_url' => '',
+            'asset_url' => envConfig('ASSET_URL'),
             /*
               |--------------------------------------------------------------------------
               | Profiler Toolbar

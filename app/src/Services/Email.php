@@ -2,7 +2,6 @@
 
 namespace BharatPHP\App\Src\Services;
 
-class Email
-{
+class Email {
     //put your code here
 }

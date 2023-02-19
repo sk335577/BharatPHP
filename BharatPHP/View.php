@@ -81,6 +81,10 @@ class View {
         if (isset($this->injected_templates[$position])) {
             foreach ($this->injected_templates[$position] as $t) {
                 if (is_file(BharatPHP_VIEW_PATH . "/" . $t . ".phtml")) {
+                    
+                            foreach ($this->params as $key => $value) {
+            $$key = $value;
+        }
                     $is_template_printed = true;
                     include_once BharatPHP_VIEW_PATH . "/" . $t . ".phtml";
                 }

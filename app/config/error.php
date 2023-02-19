@@ -16,7 +16,7 @@ return [
           | stack trace could contain sensitive information.
           |
          */
-        'detail' => true,
+        'detail' => envConfig('DEBUG_APP_ERROR_DETAIL', true),
         /*
           |--------------------------------------------------------------------------
           | Error Logging
@@ -27,6 +27,6 @@ return [
           | errors however you want. Enjoy the flexibility.
           |
          */
-        'log' => true
+        'log' => envConfig('DEBUG_APP_LOG_ERRORS', true)
     ],
 ];

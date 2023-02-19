@@ -147,7 +147,7 @@ class Auth {
         if ($remember)
             $this->remember($token);
 
-        Event::fire('laravel.auth: login');
+        Event::fire('bharatphp.auth: login');
 
         return true;
     }
@@ -164,7 +164,7 @@ class Auth {
 
         Session::forget($this->token());
 
-        Event::fire('laravel.auth: logout');
+        Event::fire('bharatphp.auth: logout');
 
         $this->token = null;
     }

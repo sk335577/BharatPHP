@@ -1,6 +1,6 @@
 
 #Load configuration app/config/env/example.env
-SetEnv APP_ENV example 
+SetEnv APP_ENV local 
 
 <IfModule mod_rewrite.c>
 RewriteEngine  On

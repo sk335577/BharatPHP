@@ -5,11 +5,50 @@ use BharatPHP\Application;
 use BharatPHP\Translator;
 use BharatPHP\Session;
 use BharatPHP\HTML;
+use BharatPHP\URL;
 
 function setConfig($path, $value) {
     Config::setConfig($path, $value);
 }
 
+function createUrlSlug($text,string $divider = '-')
+{
+//  $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $urlString);
+  // replace non letter or digits by divider
+  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+
+  // transliterate
+  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+  // remove unwanted characters
+  $text = preg_replace('~[^-\w]+~', '', $text);
+
+  // trim
+  $text = trim($text, $divider);
+
+  // remove duplicate divider
+  $text = preg_replace('~-+~', $divider, $text);
+
+  // lowercase
+  $text = strtolower($text);
+
+  if (empty($text)) {
+    return 'n-a';
+  }
+
+  return $text;
+//  return $slug;
+}
+
+
+function limitTextByWords($text, $limit,$end_txt='...') {
+    if (str_word_count($text, 0) > $limit) {
+        $words = str_word_count($text, 2);
+        $pos   = array_keys($words);
+        $text  = substr($text, 0, $pos[$limit]) . $end_txt;
+    }
+    return $text;
+}
 
 function printFullWebRequestURL() {
     echo request()->getFullBrowserURL();
@@ -18,7 +57,13 @@ function printFullWebRequestURL() {
 function printAppTitleTag($title, $add_app_name = true, $app_seperator = " - ") {
     $title = trim($title);
     if ($add_app_name) {
+        if(!empty($title)){
+            
         $title .= " $app_seperator " . config('app_title');
+        }else{
+        $title = "" . config('app_title');
+            
+        }
     }
     echo "<title>$title</title>";
 }
