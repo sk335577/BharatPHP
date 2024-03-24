@@ -1,29 +1,33 @@
 {
-    "name": "sk335577/BharatPHP",
-    "description": "The BharatPHP Framework.",
-    "keywords": ["framework", "BharatPHP", "mvc"],
-    "license": "MIT",
-    "homepage": "https://github.com/sk335577/BharatPHP",
-    "support": {
-        "issues": "https://github.com/sk335577/BharatPHP/issues",
-        "source": "https://github.com/sk335577/BharatPHP"
-    },
-    "authors": [
-        {
-            "name": "Sandeep Kumar Pal",
-            "email": "sandeep335577@gmail.com"
-        }
-    ],
-    "require": {
-        "phpmailer/phpmailer": "^6.6"
-    },
-    "autoload": {
-        "files": [
-            "BharatPHP/helpers.php"
-        ],
-        "psr-4": {
-            "BharatPHP\\": "BharatPHP/",
-            "App\\": "app/src/"
-        }
+  "name": "sk335577/bharatphp",
+  "description": "The BharatPHP Framework.",
+  "keywords": [
+    "framework",
+    "BharatPHP",
+    "mvc"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sk335577/BharatPHP",
+  "support": {
+    "issues": "https://github.com/sk335577/BharatPHP/issues",
+    "source": "https://github.com/sk335577/BharatPHP"
+  },
+  "authors": [
+    {
+      "name": "Sandeep Kumar Pal",
+      "email": "sandeep335577@gmail.com"
     }
+  ],
+  "require": {
+    "phpmailer/phpmailer": "^6.6"
+  },
+  "autoload": {
+    "files": [
+      "BharatPHP/helpers.php"
+    ],
+    "psr-4": {
+      "BharatPHP\\": "BharatPHP/",
+      "App\\": "app/src/"
+    }
+  }
 }

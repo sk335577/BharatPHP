@@ -59,6 +59,28 @@ What are the project requirements/dependencies? Where are they listed? A require
 
 Proceed to describe how to install / setup one's local environment / get started with the project.
 
+### Tables to create if database session and caching via database is used
+`DROP TABLE IF EXISTS sessions;
+CREATE TABLE IF NOT EXISTS sessions (
+  id varchar(40) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  last_activity bigint(20) UNSIGNED NOT NULL,
+  data text COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  PRIMARY KEY ('id')
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;`
+
+
+`Schema::create('cache', function (Blueprint $table) {
+   15             $table->string('key')->primary();
+   16             $table->mediumText('value');
+   17             $table->integer('expiration');
+   18         });
+   19 
+   20         Schema::create('cache_locks', function (Blueprint $table) {
+   21             $table->string('key')->primary();
+   22             $table->string('owner');
+   23             $table->integer('expiration');
+   24         });`
+
 
 ## Usage
 How does one go about using it?
