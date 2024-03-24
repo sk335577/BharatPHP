@@ -6,7 +6,8 @@ use BharatPHP\Exception\NotFoundException;
 use BharatPHP\Routes;
 use BharatPHP\Translator;
 
-class Router {
+class Router
+{
 
     private Request $request;
     private Response $response;
@@ -18,7 +19,8 @@ class Router {
      * @param Request $request
      * @param Response $response
      */
-    public function __construct(Request $request, Response $response) {
+    public function __construct(Request $request, Response $response)
+    {
 
         //Load routes
         include BharatPHP_ROOT_PATH . '/app/routes/web.php';
@@ -27,7 +29,8 @@ class Router {
         $this->response = $response;
     }
 
-    public function getCallback() {
+    public function getCallback()
+    {
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
         // Trim slashes
@@ -50,14 +53,14 @@ class Router {
             }
 
             // Find all route names from route and save in $routeNames
-//            if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)) {
+            //            if (preg_match_all('/\{(\w+)(:[^}]+)?}/', $route, $matches)) {
             if (preg_match_all('/\{([a-zA-Z-_0-9.]+)(:[^}]+)?}/', $route, $matches)) {
                 $routeNames = $matches[1];
             }
 
             // Convert route name into regex pattern
-//            $routeRegex = "@^" . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . "$@";
-            $routeRegex = "@^" . preg_replace_callback('/\{[a-zA-Z-_0-9.]+(:([^}]+))?}/', fn($m) => isset($m[2]) ? "({$m[2]})" : '([a-zA-Z-_0-9.]+)', $route) . "$@";
+            //            $routeRegex = "@^" . preg_replace_callback('/\{\w+(:([^}]+))?}/', fn($m) => isset($m[2]) ? "({$m[2]})" : '(\w+)', $route) . "$@";
+            $routeRegex = "@^" . preg_replace_callback('/\{[a-zA-Z-_0-9.]+(:([^}]+))?}/', fn ($m) => isset($m[2]) ? "({$m[2]})" : '([a-zA-Z-_0-9.]+)', $route) . "$@";
 
             // Test and match current route against $routeRegex
             if (preg_match_all($routeRegex, $url, $valueMatches)) {
@@ -70,7 +73,7 @@ class Router {
                 $routeParams = array_combine($routeNames, $values);
 
                 $this->request->setRouteParams($routeParams);
-//                return $callback['callback'];
+                //                return $callback['callback'];
                 return $callback;
             }
         }
@@ -78,7 +81,8 @@ class Router {
         return false;
     }
 
-    public function resolve() {
+    public function resolve()
+    {
 
         $method = $this->request->getMethod();
         $url = $this->request->getUrl();
@@ -112,10 +116,10 @@ class Router {
 
                     $error_404_view = config('views.404');
 
-//                    return $this->renderView($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+                    //                    return $this->renderView($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
                     app()->response()->setCode(404);
                     return app()->response()->setBody(view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']));
-//                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+                    //                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
                 } else {
                     throw new NotFoundException();
                 }
@@ -135,10 +139,10 @@ class Router {
             $controller = new $callback[0]($this->request, $this->response);
             $controller->action = $callback[1];
 
-            app()->controller = $controller;
+            // app()->controller = $controller;//commented to fix : Cannot access private property BharatPHP\Application::$controller
 
             if (isset($route_options['middleware'])) {
-//                $middlewares = $controller->getMiddlewares();
+                //                $middlewares = $controller->getMiddlewares();
                 $middlewares = $route_options['middleware'];
                 $middleware_response_set = false;
 
@@ -164,13 +168,14 @@ class Router {
         return call_user_func($callback);
     }
 
-    public function renderView($view, $params = []) {
-//        return view()->renderView($view, $params);
+    public function renderView($view, $params = [])
+    {
+        //        return view()->renderView($view, $params);
         return view($view, $params);
     }
 
-    public function renderViewOnly($view, $params = []) {
+    public function renderViewOnly($view, $params = [])
+    {
         return viewWithoutLayout($view, $params);
     }
-
 }

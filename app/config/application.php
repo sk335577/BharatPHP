@@ -1,11 +1,10 @@
 <?php
 
 return array_replace_recursive(
-        [
-            'app_title' => envConfig('APP_TITLE', 'BharatPHP'),
-            'paths' => [
-            ],
-            /*
+  [
+    'app_title' => envConfig('APP_TITLE', 'BharatPHP'),
+    'paths' => [],
+    /*
               |--------------------------------------------------------------------------
               | Application Key
               |--------------------------------------------------------------------------
@@ -16,8 +15,8 @@ return array_replace_recursive(
               | characters of random gibberish.
               |
              */
-            'application_key' => envConfig('APP_KEY', 'BharatPHP'),
-            /*
+    'application_key' => envConfig('APP_KEY', 'BharatPHP'),
+    /*
               |--------------------------------------------------------------------------
               | Application URL
               |--------------------------------------------------------------------------
@@ -27,8 +26,8 @@ return array_replace_recursive(
               | of your application.
               |
              */
-            'url' => envConfig('APP_URL'),
-            /*
+    'url' => envConfig('APP_URL'),
+    /*
               |--------------------------------------------------------------------------
               | Asset URL
               |--------------------------------------------------------------------------
@@ -38,8 +37,8 @@ return array_replace_recursive(
               | is not set, we'll default to the application URL above.
               |
              */
-            'asset_url' => envConfig('ASSET_URL'),
-            /*
+    'asset_url' => envConfig('ASSET_URL'),
+    /*
               |--------------------------------------------------------------------------
               | Profiler Toolbar
               |--------------------------------------------------------------------------
@@ -50,8 +49,8 @@ return array_replace_recursive(
               | disable the toolbar for production applications.
               |
              */
-//            'profiler' => false,
-            /*
+    //            'profiler' => false,
+    /*
               |--------------------------------------------------------------------------
               | Application Character Encoding
               |--------------------------------------------------------------------------
@@ -61,8 +60,8 @@ return array_replace_recursive(
               | to know what type of encoding to use for your awesome application.
               |
              */
-            'encoding' => 'UTF-8',
-            /*
+    'encoding' => 'UTF-8',
+    /*
               |--------------------------------------------------------------------------
               | Application Timezone
               |--------------------------------------------------------------------------
@@ -72,15 +71,16 @@ return array_replace_recursive(
               | to a distant star at warp speed.
               |
              */
-            'timezone' => 'UTC',
-        ],
-        require BharatPHP_APP_CONFIG_PATH . '/views.php',
-        require BharatPHP_APP_CONFIG_PATH . '/auth.php',
-        require BharatPHP_APP_CONFIG_PATH . '/database.php',
-        require BharatPHP_APP_CONFIG_PATH . '/services.php',
-        require BharatPHP_APP_CONFIG_PATH . '/events.php',
-        require BharatPHP_APP_CONFIG_PATH . '/session.php',
-        require BharatPHP_APP_CONFIG_PATH . '/languages.php',
-        require BharatPHP_APP_CONFIG_PATH . '/error.php',
-        require BharatPHP_APP_CONFIG_PATH . '/mail.php',
+    'timezone' => 'UTC',
+  ],
+  require BharatPHP_APP_CONFIG_PATH . '/views.php',
+  require BharatPHP_APP_CONFIG_PATH . '/auth.php',
+  require BharatPHP_APP_CONFIG_PATH . '/cache.php',
+  require BharatPHP_APP_CONFIG_PATH . '/database.php',
+  require BharatPHP_APP_CONFIG_PATH . '/services.php',
+  require BharatPHP_APP_CONFIG_PATH . '/events.php',
+  require BharatPHP_APP_CONFIG_PATH . '/session.php',
+  require BharatPHP_APP_CONFIG_PATH . '/languages.php',
+  require BharatPHP_APP_CONFIG_PATH . '/error.php',
+  require BharatPHP_APP_CONFIG_PATH . '/mail.php',
 );

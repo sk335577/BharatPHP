@@ -5,6 +5,8 @@ define("BharatPHP_ROOT_PATH", dirname(dirname(__FILE__)));
 define("BharatPHP_VIEW_PATH", BharatPHP_ROOT_PATH . "/app/resources/views");
 define("BharatPHP_LANG_PATH", BharatPHP_ROOT_PATH . "/app/lang");
 define("BharatPHP_STORAGE_PATH", BharatPHP_ROOT_PATH . "/app/storage");
+define("BharatPHP_STORAGE_FRAMEWORK_PATH", BharatPHP_ROOT_PATH . "/app/storage/framework");
+define("BharatPHP_CACHE_PATH", BharatPHP_STORAGE_FRAMEWORK_PATH . "/cache");
 define("BharatPHP_PUBLIC_PATH", BharatPHP_ROOT_PATH . "/public");
 define("BharatPHP_APP_PATH", BharatPHP_ROOT_PATH . "/app");
 define("BharatPHP_APP_CONFIG_PATH", BharatPHP_ROOT_PATH . "/app/config");
@@ -15,4 +17,3 @@ if (getenv('APP_ENV') === false) {
 }
 
 require_once BharatPHP_ROOT_PATH . '/BharatPHP/bootstrap.php';
-

@@ -4,7 +4,8 @@ namespace BharatPHP\Session\Drivers;
 
 use BharatPHP\Session\Drivers\Sweeper;
 
-class File extends Driver implements Sweeper {
+class File extends Driver implements Sweeper
+{
 
     /**
      * The path to which the session files should be written.
@@ -19,7 +20,8 @@ class File extends Driver implements Sweeper {
      * @param  string        $path
      * @return void
      */
-    public function __construct($path) {
+    public function __construct($path)
+    {
         $this->path = $path;
     }
 
@@ -31,7 +33,8 @@ class File extends Driver implements Sweeper {
      * @param  string  $id
      * @return array
      */
-    public function load($id) {
+    public function load($id)
+    {
         if (file_exists($path = $this->path . $id)) {
             return unserialize(file_get_contents($path));
         }
@@ -45,7 +48,8 @@ class File extends Driver implements Sweeper {
      * @param  bool   $exists
      * @return void
      */
-    public function save($session, $config, $exists) {
+    public function save($session, $config, $exists)
+    {
         file_put_contents($this->path . $session['id'], serialize($session), LOCK_EX);
     }
 
@@ -55,7 +59,8 @@ class File extends Driver implements Sweeper {
      * @param  string  $id
      * @return void
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         if (file_exists($this->path . $id)) {
             @unlink($this->path . $id);
         }
@@ -67,7 +72,8 @@ class File extends Driver implements Sweeper {
      * @param  int   $expiration
      * @return void
      */
-    public function sweep($expiration) {
+    public function sweep($expiration)
+    {
         $files = glob($this->path . '*');
 
         if ($files === false)
@@ -79,5 +85,4 @@ class File extends Driver implements Sweeper {
             }
         }
     }
-
 }

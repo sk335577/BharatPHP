@@ -7,41 +7,43 @@ use BharatPHP\Session;
 use BharatPHP\HTML;
 use BharatPHP\URL;
 
-function setConfig($path, $value) {
+function setConfig($path, $value)
+{
     Config::setConfig($path, $value);
 }
 
-function createUrlSlug($text,string $divider = '-')
+function createUrlSlug($text, string $divider = '-')
 {
-//  $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $urlString);
-  // replace non letter or digits by divider
-  $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
+    //  $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $urlString);
+    // replace non letter or digits by divider
+    $text = preg_replace('~[^\pL\d]+~u', $divider, $text);
 
-  // transliterate
-  $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    // transliterate
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
 
-  // remove unwanted characters
-  $text = preg_replace('~[^-\w]+~', '', $text);
+    // remove unwanted characters
+    $text = preg_replace('~[^-\w]+~', '', $text);
 
-  // trim
-  $text = trim($text, $divider);
+    // trim
+    $text = trim($text, $divider);
 
-  // remove duplicate divider
-  $text = preg_replace('~-+~', $divider, $text);
+    // remove duplicate divider
+    $text = preg_replace('~-+~', $divider, $text);
 
-  // lowercase
-  $text = strtolower($text);
+    // lowercase
+    $text = strtolower($text);
 
-  if (empty($text)) {
-    return 'n-a';
-  }
+    if (empty($text)) {
+        return 'n-a';
+    }
 
-  return $text;
-//  return $slug;
+    return $text;
+    //  return $slug;
 }
 
 
-function limitTextByWords($text, $limit,$end_txt='...') {
+function limitTextByWords($text, $limit, $end_txt = '...')
+{
     if (str_word_count($text, 0) > $limit) {
         $words = str_word_count($text, 2);
         $pos   = array_keys($words);
@@ -50,77 +52,98 @@ function limitTextByWords($text, $limit,$end_txt='...') {
     return $text;
 }
 
-function printFullWebRequestURL() {
+function printFullWebRequestURL()
+{
     echo request()->getFullBrowserURL();
 }
 
-function printAppTitleTag($title, $add_app_name = true, $app_seperator = " - ") {
+function printAppTitleTag($title, $add_app_name = true, $app_seperator = " - ")
+{
     $title = trim($title);
     if ($add_app_name) {
-        if(!empty($title)){
-            
-        $title .= " $app_seperator " . config('app_title');
-        }else{
-        $title = "" . config('app_title');
-            
+        if (!empty($title)) {
+
+            $title .= " $app_seperator " . config('app_title');
+        } else {
+            $title = "" . config('app_title');
         }
     }
     echo "<title>$title</title>";
 }
 
-function config($path = '', $default = '') {
+function config($path = '', $default = '')
+{
     return Config::get($path, $default);
 }
+function path($path = '', $default = '')
+{
+    if ($path == 'storage') {
+        return BharatPHP_STORAGE_PATH;
+    }
+}
 
-function envConfig($config_name = '', $default = '') {
+function envConfig($config_name = '', $default = '')
+{
     return Config::envConfig($config_name, $default);
 }
 
-function request() {
+function request()
+{
     return app()->request();
 }
 
-function csrfToken() {
+function csrfToken()
+{
     return Session::token();
 }
 
-function appUrl() {
+function appUrl()
+{
     return app()->request()->appUrl();
 }
 
-function printAppUrl() {
+function printAppUrl()
+{
     echo app()->request()->appUrl();
 }
 
-function getTemplatePart($part, $viewtype = 'frontend') {
+function getTemplatePart($part, $viewtype = 'frontend')
+{
     return app()->view()->getTemplatePart($part);
 }
 
-function injectTemplate($position, $template, $viewtype = 'frontend') {
+function injectTemplate($position, $template, $viewtype = 'frontend')
+{
     return app()->view()->injectTemplate($position, $template, $viewtype);
 }
 
-function printInjectedTemplates($position,) {
+function printInjectedTemplates($position,)
+{
     return app()->view()->printInjectedTemplates($position);
 }
 
-function view($view, $params = [], $layout = 'layouts/default', $viewtype = 'frontend') {
+function view($view, $params = [], $layout = 'layouts/default', $viewtype = 'frontend')
+{
     return app()->view()->renderView($view, $params, $layout, $viewtype);
 }
 
-function viewWithoutLayout($view, $params = [], $viewtype = 'frontend') {
+function viewWithoutLayout($view, $params = [], $viewtype = 'frontend')
+{
     return app()->view()->renderViewOnly($view, $params, $viewtype);
 }
 
-function app(): Application {
+function app(): Application
+{
     return Application::app();
 }
 
-function routeNameToURL($route_name, $route_params = []) {
+function routeNameToURL($route_name, $route_params = [])
+{
     return \BharatPHP\Routes::routeNameToURL($route_name, $route_params);
 }
 
-function json($data, $http_code = 200) {
+function json($data, $http_code = 200)
+{
 
     app()->response()->setHeader('Content-Type', 'application/json');
     app()->response()->setCode($http_code);
@@ -129,7 +152,8 @@ function json($data, $http_code = 200) {
     return app()->response();
 }
 
-function response($view, $http_code = 200) {
+function response($view, $http_code = 200)
+{
 
     app()->response()->setCode($http_code);
     app()->response()->setBody($view);
@@ -137,11 +161,13 @@ function response($view, $http_code = 200) {
     return app()->response();
 }
 
-function getCookie($name) {
+function getCookie($name)
+{
     return app()->request()->getCookie($name);
 }
 
-function printTemplatePart($part, $params = [], $viewtype = 'frontend') {
+function printTemplatePart($part, $params = [], $viewtype = 'frontend')
+{
     echo app()->view()->getTemplatePart($part, $params);
 }
 
@@ -157,11 +183,13 @@ function printTemplatePart($part, $params = [], $viewtype = 'frontend') {
  * @param  string  $value
  * @return string
  */
-function e($value) {
+function e($value)
+{
     return HTML::entities($value);
 }
 
-function t($string) {
+function t($string)
+{
     return Translator::t($string);
 }
 
@@ -171,21 +199,24 @@ function t($string) {
  * @param  mixed  $value
  * @return void
  */
-function vd($value) {
+function vd($value)
+{
     echo "<pre>";
     var_dump($value);
     echo "</pre>";
     die;
 }
 
-function pd($value) {
+function pd($value)
+{
     echo "<pre>";
     print_r($value);
     echo "</pre>";
     die;
 }
 
-function pr($value) {
+function pr($value)
+{
     echo "<pre>";
     print_r($value);
     echo "</pre>";
@@ -207,7 +238,8 @@ function pr($value) {
  * @param  mixed   $default
  * @return mixed
  */
-function array_get($array, $key, $default = null) {
+function array_get($array, $key, $default = null)
+{
     if (is_null($key))
         return $array;
 
@@ -216,7 +248,7 @@ function array_get($array, $key, $default = null) {
     // will return it, otherwise we will set the depth of the array and
     // look for the next segment.
     foreach (explode('.', $key) as $segment) {
-        if (!is_array($array) or!array_key_exists($segment, $array)) {
+        if (!is_array($array) or !array_key_exists($segment, $array)) {
             return value($default);
         }
 
@@ -244,7 +276,8 @@ function array_get($array, $key, $default = null) {
  * @param  mixed   $value
  * @return void
  */
-function array_set(&$array, $key, $value) {
+function array_set(&$array, $key, $value)
+{
     if (is_null($key))
         return $array = $value;
 
@@ -260,11 +293,11 @@ function array_set(&$array, $key, $value) {
         // If the key doesn't exist at this depth, we will just create an
         // empty array to hold the next value, allowing us to create the
         // arrays to hold the final value.
-        if (!isset($array[$key]) or!is_array($array[$key])) {
+        if (!isset($array[$key]) or !is_array($array[$key])) {
             $array[$key] = array();
         }
 
-        $array = & $array[$key];
+        $array = &$array[$key];
     }
 
     $array[array_shift($keys)] = $value;
@@ -285,7 +318,8 @@ function array_set(&$array, $key, $value) {
  * @param  string  $key
  * @return void
  */
-function array_forget(&$array, $key) {
+function array_forget(&$array, $key)
+{
     $keys = explode('.', $key);
 
     // This loop functions very similarly to the loop in the "set" method.
@@ -299,11 +333,11 @@ function array_forget(&$array, $key) {
         // if a value higher up in the chain doesn't exist, there is no
         // need to keep digging into the array, since it is impossible
         // for the final value to even exist.
-        if (!isset($array[$key]) or!is_array($array[$key])) {
+        if (!isset($array[$key]) or !is_array($array[$key])) {
             return;
         }
 
-        $array = & $array[$key];
+        $array = &$array[$key];
     }
 
     unset($array[array_shift($keys)]);
@@ -325,7 +359,8 @@ function array_forget(&$array, $key) {
  * @param  mixed    $default
  * @return mixed
  */
-function array_first($array, $callback, $default = null) {
+function array_first($array, $callback, $default = null)
+{
     foreach ($array as $key => $value) {
         if (call_user_func($callback, $key, $value))
             return $value;
@@ -340,7 +375,8 @@ function array_first($array, $callback, $default = null) {
  * @param  array  $array
  * @return array
  */
-function array_strip_slashes($array) {
+function array_strip_slashes($array)
+{
     $result = array();
 
     foreach ($array as $key => $value) {
@@ -365,7 +401,8 @@ function array_strip_slashes($array) {
  * @param  array  $array
  * @return array
  */
-function array_divide($array) {
+function array_divide($array)
+{
     return array(array_keys($array), array_values($array));
 }
 
@@ -376,7 +413,8 @@ function array_divide($array) {
  * @param  string  $key
  * @return array
  */
-function array_pluck($array, $key) {
+function array_pluck($array, $key)
+{
     return array_map(function ($v) use ($key) {
         return is_object($v) ? $v->$key : $v[$key];
     }, $array);
@@ -389,7 +427,8 @@ function array_pluck($array, $key) {
  * @param  array  $keys
  * @return array
  */
-function array_only($array, $keys) {
+function array_only($array, $keys)
+{
     return array_intersect_key($array, array_flip((array) $keys));
 }
 
@@ -400,7 +439,8 @@ function array_only($array, $keys) {
  * @param  array  $keys
  * @return array
  */
-function array_except($array, $keys) {
+function array_except($array, $keys)
+{
     return array_diff_key($array, array_flip((array) $keys));
 }
 
@@ -409,7 +449,8 @@ function array_except($array, $keys) {
  *
  * @return bool
  */
-function magic_quotes() {
+function magic_quotes()
+{
     return function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc();
 }
 
@@ -421,7 +462,8 @@ function magic_quotes() {
  * @param  array  $array
  * @return mixed
  */
-function head($array) {
+function head($array)
+{
     return reset($array);
 }
 
@@ -440,7 +482,8 @@ function head($array) {
  * @param  bool    $https
  * @return string
  */
-function url($url = '', $https = null) {
+function url($url = '', $https = null)
+{
     return URL::to($url, $https);
 }
 
@@ -451,7 +494,8 @@ function url($url = '', $https = null) {
  * @param  bool    $https
  * @return string
  */
-function asset($url, $https = null) {
+function asset($url, $https = null)
+{
     return URL::to_asset($url, $https);
 }
 
@@ -470,7 +514,8 @@ function asset($url, $https = null) {
  * @param  array   $parameters
  * @return string
  */
-function action($action, $parameters = array()) {
+function action($action, $parameters = array())
+{
     return URL::to_action($action, $parameters);
 }
 
@@ -489,7 +534,8 @@ function action($action, $parameters = array()) {
  * @param  array   $parameters
  * @return string
  */
-function route($name, $parameters = array()) {
+function route($name, $parameters = array())
+{
     return URL::to_route($name, $parameters);
 }
 
@@ -500,7 +546,8 @@ function route($name, $parameters = array()) {
  * @param  string  $needle
  * @return bool
  */
-function starts_with($haystack, $needle) {
+function starts_with($haystack, $needle)
+{
     return strpos($haystack, $needle) === 0;
 }
 
@@ -511,7 +558,8 @@ function starts_with($haystack, $needle) {
  * @param  string  $needle
  * @return bool
  */
-function ends_with($haystack, $needle) {
+function ends_with($haystack, $needle)
+{
     return $needle == substr($haystack, strlen($haystack) - strlen($needle));
 }
 
@@ -538,7 +586,8 @@ function ends_with($haystack, $needle) {
  * @param  string  $cap
  * @return string
  */
-function str_finish($value, $cap) {
+function str_finish($value, $cap)
+{
     return rtrim($value, $cap) . $cap;
 }
 
@@ -548,7 +597,8 @@ function str_finish($value, $cap) {
  * @param  object  $value
  * @return bool
  */
-function str_object($value) {
+function str_object($value)
+{
     return is_object($value) and method_exists($value, '__toString');
 }
 
@@ -559,7 +609,8 @@ function str_object($value) {
  * @param  string  $separator
  * @return string
  */
-function root_namespace($class, $separator = '\\') {
+function root_namespace($class, $separator = '\\')
+{
     if (str_contains($class, $separator)) {
         return head(explode($separator, $class));
     }
@@ -573,7 +624,8 @@ function root_namespace($class, $separator = '\\') {
  * @param  object|string  $class
  * @return string
  */
-function class_basename($class) {
+function class_basename($class)
+{
     if (is_object($class))
         $class = get_class($class);
 
@@ -588,8 +640,9 @@ function class_basename($class) {
  * @param  mixed  $value
  * @return mixed
  */
-function value($value) {
-    return (is_callable($value) and!is_string($value)) ? call_user_func($value) : $value;
+function value($value)
+{
+    return (is_callable($value) and !is_string($value)) ? call_user_func($value) : $value;
 }
 
 /**
@@ -598,7 +651,8 @@ function value($value) {
  * @param  mixed  $object
  * @return mixed
  */
-function with($object) {
+function with($object)
+{
     return $object;
 }
 
@@ -608,7 +662,8 @@ function with($object) {
  * @param  string  $version
  * @return bool
  */
-function has_php($version) {
+function has_php($version)
+{
     return version_compare(PHP_VERSION, $version) >= 0;
 }
 
@@ -618,16 +673,18 @@ function has_php($version) {
  * @param  int     $size
  * @return string
  */
-function get_file_size($size) {
+function get_file_size($size)
+{
     $units = array('Bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB');
     return @round($size / pow(1024, ($i = floor(log($size, 1024)))), 2) . ' ' . $units[$i];
 }
 
-function array_filter_by_key_values(array $arr, array $params) {
+function array_filter_by_key_values(array $arr, array $params)
+{
 
     $res = array_filter(
-            $arr,
-            fn($row) => !array_diff_assoc($params, $row)
+        $arr,
+        fn ($row) => !array_diff_assoc($params, $row)
     );
 
     if (count($res)) {
@@ -640,10 +697,12 @@ function array_filter_by_key_values(array $arr, array $params) {
     return [];
 }
 
-function getRouteParams() {
+function getRouteParams()
+{
     return app()->request()->getRouteParams();
 }
 
-function getRouteParam($param, $default = null) {
+function getRouteParam($param, $default = null)
+{
     return app()->request()->getRouteParam($param, $default);
 }

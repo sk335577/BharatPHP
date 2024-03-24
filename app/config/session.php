@@ -1,8 +1,8 @@
 <?php
 
 return array(
-    'session' => [
-        /*
+      'session' => [
+            /*
           |--------------------------------------------------------------------------
           | Session Driver
           |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ return array(
           |
          */
 
-        'driver' => 'database',
-        /*
+            'driver' => 'file',
+            /*
           |--------------------------------------------------------------------------
           | Session Database
           |--------------------------------------------------------------------------
@@ -27,8 +27,8 @@ return array(
           | the super slick database session driver.
           |
          */
-        'table' => 'sessions',
-        /*
+            'table' => 'sessions',
+            /*
           |--------------------------------------------------------------------------
           | Session Garbage Collection Probability
           |--------------------------------------------------------------------------
@@ -42,8 +42,8 @@ return array(
           | Feel free to tune this to your requirements.
           |
          */
-        'sweepage' => array(2, 100),
-        /*
+            'sweepage' => array(2, 100),
+            /*
           |--------------------------------------------------------------------------
           | Session Lifetime
           |--------------------------------------------------------------------------
@@ -51,8 +51,8 @@ return array(
           | The number of minutes a session can be idle before expiring.
           |
          */
-        'lifetime' => 5,
-        /*
+            'lifetime' => 5,
+            /*
           |--------------------------------------------------------------------------
           | Session Expiration On Close
           |--------------------------------------------------------------------------
@@ -60,8 +60,8 @@ return array(
           | Determines if the session should expire when the user's web browser closes.
           |
          */
-        'expire_on_close' => false,
-        /*
+            'expire_on_close' => false,
+            /*
           |--------------------------------------------------------------------------
           | Session Cookie Name
           |--------------------------------------------------------------------------
@@ -69,8 +69,8 @@ return array(
           | The name that should be given to the session cookie.
           |
          */
-        'cookie' => 'bharatphp_session',
-        /*
+            'cookie' => 'bharatphp_session',
+            /*
           |--------------------------------------------------------------------------
           | Session Cookie Path
           |--------------------------------------------------------------------------
@@ -78,8 +78,8 @@ return array(
           | The path for which the session cookie is available.
           |
          */
-        'path' => '/',
-        /*
+            'path' => '/',
+            /*
           |--------------------------------------------------------------------------
           | Session Cookie Domain
           |--------------------------------------------------------------------------
@@ -87,8 +87,8 @@ return array(
           | The domain for which the session cookie is available.
           |
          */
-        'domain' => null,
-        /*
+            'domain' => null,
+            /*
           |--------------------------------------------------------------------------
           | HTTPS Only Session Cookie
           |--------------------------------------------------------------------------
@@ -96,6 +96,6 @@ return array(
           | Determines if the cookie should only be sent over HTTPS.
           |
          */
-        'secure' => false,
-    ]
+            'secure' => false,
+      ]
 );

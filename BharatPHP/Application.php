@@ -9,7 +9,8 @@ use BharatPHP\Request;
 use BharatPHP\Response;
 use BharatPHP\Session;
 
-class Application {
+class Application
+{
 
     private static Application $app;
     private Router $router;
@@ -19,7 +20,8 @@ class Application {
     private Events $events;
     private View $view;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         self::$app = $this;
 
@@ -54,51 +56,63 @@ class Application {
         }
     }
 
-    public function registerRequest(Request $request) {
+    public function registerRequest(Request $request)
+    {
         $this->request = $request;
     }
 
-    public function registerResponse(Response $response) {
+    public function registerResponse(Response $response)
+    {
         $this->response = $response;
     }
 
-    public function registerRouter(Router $router) {
+    public function registerRouter(Router $router)
+    {
         $this->router = $router;
     }
 
-    public function registerView(View $view) {
+    public function registerView(View $view)
+    {
         $this->view = $view;
     }
 
-    public function registerServices(Services $services) {
+    public function registerServices(Services $services)
+    {
         $this->services = $services;
     }
 
-    public function registerEvents(Events $events) {
+    public function registerEvents(Events $events)
+    {
         $this->events = $events;
     }
 
-    public function services() {
+    public function services()
+    {
         return $this->services;
     }
 
-    public function router() {
+    public function router()
+    {
         return $this->router;
     }
 
-    public function request() {
+    public function request()
+    {
         return $this->request;
     }
 
-    public function response() {
+    public function response()
+    {
         return $this->response;
     }
 
-    public function view() {
+    public function view()
+    {
         return $this->view;
     }
 
-    public function events() {
+    public function events()
+    {
         return $this->events;
     }
 
@@ -106,7 +120,8 @@ class Application {
      * 
      * @return Application
      */
-    public static function app(): Application {
+    public static function app(): Application
+    {
         return self::$app;
     }
 
@@ -115,14 +130,16 @@ class Application {
      *
      * @return bool
      */
-    public function isDownForMaintenance() {
+    public function isDownForMaintenance()
+    {
         return file_exists(BharatPHP_STORAGE_PATH . '/framework/down');
     }
 
     /**
      * 
      */
-    public function run() {
+    public function run()
+    {
 
 
         if (config('session.driver') != '') {
@@ -131,13 +148,13 @@ class Application {
 
         $this->events->trigger('before.app.route', array('app' => $this));
 
-//        try {
+        //        try {
         $this->router->resolve();
-//        } catch (\Exception $e) {
-//            print_r($e);
-//            $this->response()->setCode(404);
-//            $this->response()->setBody(view('errors/404'));
-//        }
+        //        } catch (\Exception $e) {
+        //            print_r($e);
+        //            $this->response()->setCode(404);
+        //            $this->response()->setBody(view('errors/404'));
+        //        }
 
         if (config('session.driver') != '') {
             Session::save();
@@ -147,5 +164,4 @@ class Application {
 
         $this->events->trigger('after.app.route', array('app' => $this));
     }
-
 }

@@ -5,7 +5,8 @@ namespace BharatPHP\Session\Drivers;
 use BharatPHP\Crypter,
     BharatPHP\Cookie as C;
 
-class Cookie extends Driver {
+class Cookie extends Driver
+{
 
     /**
      * The name of the cookie used to store the session payload.
@@ -22,7 +23,8 @@ class Cookie extends Driver {
      * @param  string  $id
      * @return array
      */
-    public function load($id) {
+    public function load($id)
+    {
         if (C::has(Cookie::payload)) {
             return unserialize(Crypter::decrypt(C::get(Cookie::payload)));
         }
@@ -36,7 +38,8 @@ class Cookie extends Driver {
      * @param  bool   $exists
      * @return void
      */
-    public function save($session, $config, $exists) {
+    public function save($session, $config, $exists)
+    {
         extract($config, EXTR_SKIP);
 
         $payload = Crypter::encrypt(serialize($session));
@@ -50,8 +53,8 @@ class Cookie extends Driver {
      * @param  string  $id
      * @return void
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         C::forget(Cookie::payload);
     }
-
 }
