@@ -770,7 +770,7 @@ function sanitizeEmail($email)
     return $email;
 }
 
-function mkdir($dir, $permission = 0755)
+function createDirectory($dir, $permission = 0755)
 {
     return mkdir($dir, $permission, true);
 }

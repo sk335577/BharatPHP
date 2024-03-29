@@ -8,3 +8,7 @@
 /public/.htaccess
 /node_modules/
 /Lib/
+app/config/env/local.env
+app/config/env/local.env
+app/config/env/demo.env
+
