@@ -85,6 +85,7 @@ class Router
     {
 
         $method = $this->request->getMethod();
+        $is_ajax = $this->request->isAjax();
         $url = $this->request->getUrl();
 
         $method_routes = Routes::getRouteMap($method);

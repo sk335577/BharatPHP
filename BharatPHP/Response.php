@@ -5,7 +5,8 @@ namespace BharatPHP;
 use Exception;
 use BharatPHP\Cookie;
 
-class Response {
+class Response
+{
 
     /**
      * Response codes & messages
@@ -119,14 +120,15 @@ class Response {
      * @throws Exception
      * @return Response
      */
-    public function __construct(array $config = []) {
+    public function __construct(array $config = [])
+    {
         $this->setCode((isset($config['code'])) ? $config['code'] : 200);
         $this->setBody((isset($config['body'])) ? $config['body'] : null);
         $this->setMessage((isset($config['message'])) ? $config['message'] : self::$responseCodes[$this->code]);
         $this->setVersion((isset($config['version'])) ? $config['version'] : '1.1');
 
         $headers = (isset($config['headers']) && is_array($config['headers'])) ?
-                $config['headers'] : ['Content-Type' => 'text/html'];
+            $config['headers'] : ['Content-Type' => 'text/html'];
 
         $this->setHeaders($headers);
     }
@@ -140,7 +142,8 @@ class Response {
      * @throws Exception
      * @return void
      */
-    public static function redirect($url, $code = '302', $version = '1.1') {
+    public static function redirect($url, $code = '302', $version = '1.1')
+    {
         if (headers_sent()) {
             throw new Exception('The headers have already been sent.');
         }
@@ -161,7 +164,19 @@ class Response {
      * @param  string  $version
      * @return void
      */
-    public static function redirectAndExit($url, $code = '302', $version = '1.1') {
+    public static function redirectAndExit($url, $code = '302', $version = '1.1')
+    {
+
+        static::redirect($url, $code, $version);
+        exit();
+    }
+
+    /**
+     * THis function to be removed session save should happen in Application.pphp
+     */
+    public static function redirectAndExitAndSaveSession($url, $code = '302', $version = '1.1')
+    {
+        Session::save();
         static::redirect($url, $code, $version);
         exit();
     }
@@ -173,7 +188,8 @@ class Response {
      * @throws Exception
      * @return string
      */
-    public static function getMessageFromCode($code) {
+    public static function getMessageFromCode($code)
+    {
         if (!array_key_exists($code, self::$responseCodes)) {
             throw new Exception('The header code ' . $code . ' is not valid.');
         }
@@ -189,9 +205,10 @@ class Response {
      * @throws Exception
      * @return string
      */
-    public static function encodeBody($body, $encode = 'gzip') {
+    public static function encodeBody($body, $encode = 'gzip')
+    {
         switch ($encode) {
-            // GZIP compression
+                // GZIP compression
             case 'gzip':
                 if (!function_exists('gzencode')) {
                     throw new Exception('Gzip compression is not available.');
@@ -199,7 +216,7 @@ class Response {
                 $encodedBody = gzencode($body);
                 break;
 
-            // Deflate compression
+                // Deflate compression
             case 'deflate':
                 if (!function_exists('gzdeflate')) {
                     throw new Exception('Deflate compression is not available.');
@@ -207,7 +224,7 @@ class Response {
                 $encodedBody = gzdeflate($body);
                 break;
 
-            // Unknown compression
+                // Unknown compression
             default:
                 $encodedBody = $body;
         }
@@ -223,9 +240,10 @@ class Response {
      * @throws Exception
      * @return string
      */
-    public static function decodeBody($body, $decode = 'gzip') {
+    public static function decodeBody($body, $decode = 'gzip')
+    {
         switch ($decode) {
-            // GZIP compression
+                // GZIP compression
             case 'gzip':
                 if (!function_exists('gzinflate')) {
                     throw new Exception('Gzip compression is not available.');
@@ -233,7 +251,7 @@ class Response {
                 $decodedBody = gzinflate(substr($body, 10));
                 break;
 
-            // Deflate compression
+                // Deflate compression
             case 'deflate':
                 if (!function_exists('gzinflate')) {
                     throw new Exception('Deflate compression is not available.');
@@ -242,7 +260,7 @@ class Response {
                 $decodedBody = ($zlibHeader[1] % 31 == 0) ? gzuncompress($body) : gzinflate($body);
                 break;
 
-            // Unknown compression
+                // Unknown compression
             default:
                 $decodedBody = $body;
         }
@@ -256,7 +274,8 @@ class Response {
      * @param string $body
      * @return string
      */
-    public static function decodeChunkedBody($body) {
+    public static function decodeChunkedBody($body)
+    {
         $decoded = '';
 
         while ($body != '') {
@@ -298,7 +317,8 @@ class Response {
      *
      * @return boolean
      */
-    public function isSuccess() {
+    public function isSuccess()
+    {
         $type = floor($this->code / 100);
         return (($type == 1) || ($type == 2) || ($type == 3));
     }
@@ -308,7 +328,8 @@ class Response {
      *
      * @return boolean
      */
-    public function isRedirect() {
+    public function isRedirect()
+    {
         $type = floor($this->code / 100);
         return ($type == 3);
     }
@@ -318,7 +339,8 @@ class Response {
      *
      * @return boolean
      */
-    public function isError() {
+    public function isError()
+    {
         $type = floor($this->code / 100);
         return (($type == 4) || ($type == 5));
     }
@@ -328,7 +350,8 @@ class Response {
      *
      * @return boolean
      */
-    public function isClientError() {
+    public function isClientError()
+    {
         $type = floor($this->code / 100);
         return ($type == 4);
     }
@@ -338,7 +361,8 @@ class Response {
      *
      * @return boolean
      */
-    public function isServerError() {
+    public function isServerError()
+    {
         $type = floor($this->code / 100);
         return ($type == 5);
     }
@@ -348,7 +372,8 @@ class Response {
      *
      * @return float
      */
-    public function getVersion() {
+    public function getVersion()
+    {
         return $this->version;
     }
 
@@ -357,7 +382,8 @@ class Response {
      *
      * @return int
      */
-    public function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
@@ -366,7 +392,8 @@ class Response {
      *
      * @return string
      */
-    public function getMessage() {
+    public function getMessage()
+    {
         return $this->message;
     }
 
@@ -375,7 +402,8 @@ class Response {
      *
      * @return string
      */
-    public function getBody() {
+    public function getBody()
+    {
         return $this->body;
     }
 
@@ -384,7 +412,8 @@ class Response {
      *
      * @return array
      */
-    public function getHeaders() {
+    public function getHeaders()
+    {
         return $this->headers;
     }
 
@@ -394,7 +423,8 @@ class Response {
      * @param  string $name
      * @return string
      */
-    public function getHeader($name) {
+    public function getHeader($name)
+    {
         return (isset($this->headers[$name])) ? $this->headers[$name] : null;
     }
 
@@ -405,7 +435,8 @@ class Response {
      * @param  string  $eol
      * @return string
      */
-    public function getHeadersAsString($status = true, $eol = "\n") {
+    public function getHeadersAsString($status = true, $eol = "\n")
+    {
         $headers = '';
 
         if ($status) {
@@ -425,7 +456,8 @@ class Response {
      * @param  float $version
      * @return Response
      */
-    public function setVersion($version = 1.1) {
+    public function setVersion($version = 1.1)
+    {
         if (($version == 1.0) || ($version == 1.1)) {
             $this->version = $version;
         }
@@ -439,7 +471,8 @@ class Response {
      * @throws Exception
      * @return Response
      */
-    public function setCode($code = 200) {
+    public function setCode($code = 200)
+    {
         if (!array_key_exists($code, self::$responseCodes)) {
             throw new Exception('That header code ' . $code . ' is not allowed.');
         }
@@ -456,7 +489,8 @@ class Response {
      * @param  string $message
      * @return Response
      */
-    public function setMessage($message = null) {
+    public function setMessage($message = null)
+    {
         $this->message = $message;
         return $this;
     }
@@ -467,7 +501,8 @@ class Response {
      * @param  string $body
      * @return Response
      */
-    public function setBody($body = null) {
+    public function setBody($body = null)
+    {
         $this->body = $body;
         return $this;
     }
@@ -480,7 +515,8 @@ class Response {
      * @throws Exception
      * @return Response
      */
-    public function setHeader($name, $value) {
+    public function setHeader($name, $value)
+    {
         $this->headers[$name] = $value;
         return $this;
     }
@@ -492,7 +528,8 @@ class Response {
      * @throws Exception
      * @return Response
      */
-    public function setHeaders(array $headers) {
+    public function setHeaders(array $headers)
+    {
         foreach ($headers as $name => $value) {
             $this->headers[$name] = $value;
         }
@@ -505,7 +542,8 @@ class Response {
      *
      * @return Response
      */
-    public function setSslHeaders() {
+    public function setSslHeaders()
+    {
         $this->headers['Expires'] = 0;
         $this->headers['Cache-Control'] = 'private, must-revalidate';
         $this->headers['Pragma'] = 'cache';
@@ -519,7 +557,8 @@ class Response {
      * @throws Exception
      * @return void
      */
-    public function sendHeaders() {
+    public function sendHeaders()
+    {
         header("HTTP/{$this->version} {$this->code} {$this->message}");
         foreach ($this->headers as $name => $value) {
             header($name . ": " . $value);
@@ -534,7 +573,8 @@ class Response {
      * @throws Exception
      * @return void
      */
-    public function send($code = null, array $headers = null) {
+    public function send($code = null, array $headers = null)
+    {
 
         if (headers_sent()) {
             throw new Exception('The headers have already been sent.');
@@ -551,7 +591,7 @@ class Response {
         if (!empty(Cookie::$jar)) {
 
             foreach (Cookie::$jar as $cookie) {
-//                setcookie($cookie['name'], $cookie['value'], $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
+                //                setcookie($cookie['name'], $cookie['value'], $cookie->getExpiresTime(), $cookie->getPath(), $cookie->getDomain(), $cookie->isSecure(), $cookie->isHttpOnly());
 
                 if (is_null($cookie['secure'])) {
                     $cookie['secure'] = false;
@@ -582,7 +622,8 @@ class Response {
      *
      * @return string
      */
-    public function __toString() {
+    public function __toString()
+    {
         $body = $this->body;
 
         if (array_key_exists('Content-Encoding', $this->headers)) {
@@ -592,5 +633,4 @@ class Response {
 
         return $this->getHeadersAsString() . "\n" . $body;
     }
-
 }

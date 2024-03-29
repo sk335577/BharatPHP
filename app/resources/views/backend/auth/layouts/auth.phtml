@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?php
+        if (printInjectedTemplates("head_title_meta_tags")) {
+            
+        } else {
+            ?>
+            <title><?php
+                if (isset($page_title)) {
+                    echo $page_title . " - " . config('app_title');
+                } else {
+                    echo config('app_title');
+                }
+                ?></title>
+            <?php
+        }
+        ?>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="<?php printAppUrl(); ?>/backend/assets/plugins/fontawesome-free/css/all.min.css">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="<?php printAppUrl(); ?>/backend/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="<?php printAppUrl(); ?>/backend/assets/css/adminlte.min.css">
+
+    
+    <?php
+        printInjectedTemplates("before_head_ends");
+        ?>
+</head>
+
+<body class="hold-transition login-page">
+    <!--Main Content Starts-->
+    {{content}}
+    <!--Main Content Ends-->
+
+
+    <!-- jQuery -->
+    <script src="<?php printAppUrl(); ?>/backend/assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="<?php printAppUrl(); ?>/backend/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php printAppUrl(); ?>/backend/assets/js/adminlte.min.js"></script>
+
+    <?php
+        printInjectedTemplates("before_body_ends");
+        ?>
+</body>
+
+</html>

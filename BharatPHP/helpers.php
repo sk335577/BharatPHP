@@ -706,3 +706,77 @@ function getRouteParam($param, $default = null)
 {
     return app()->request()->getRouteParam($param, $default);
 }
+
+
+function getAndClearFlashMessages($message_type = 'errors')
+{
+    $errors = Session::get($message_type);
+    Session::forget($message_type);
+    // Session::save();
+    if (empty($errors)) {
+        return [];
+    }
+    return $errors;
+}
+function setAndSaveFlashMessages($errors, $message_type = 'errors')
+{
+    Session::put($message_type, $errors);
+    // Session::save();
+}
+
+
+function sanitizeStringStripTags($str)
+{
+
+    $str = filter_var($str, FILTER_SANITIZE_STRING);
+
+    $str = strip_tags($str);
+
+    $str = htmlspecialchars($str);
+
+    //        $res = str_replace(array('\'', '"',
+    //            ',', ';', '<', '>', '*', ':', '@', '$', '(', '`', '~', ')', '[', ']', '.'), ' ', $str);
+
+    return $str;
+}
+
+function sanitizeString($str)
+{
+
+    $str = filter_var($str, FILTER_SANITIZE_STRING);
+
+    $str = strip_tags($str);
+
+    $str = htmlspecialchars($str);
+
+    $res = str_replace(array(
+        '\'', '"',
+        ',', ';', '<', '>', '*', ':', '@', '$', '(', '`', '~', ')', '[', ']', '.'
+    ), ' ', $str);
+
+    return $str;
+}
+
+/*
+ * Sanitize the input email
+ */
+
+function sanitizeEmail($email)
+{
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+
+    $email = str_replace(array('\'', '"', ';', '<', '>', '*', '`', '~', '[', ']'), ' ', $email);
+
+    return $email;
+}
+
+function mkdir($dir, $permission = 0755)
+{
+    return mkdir($dir, $permission, true);
+}
+
+function prepareUploadDirectory()
+{
+
+    // return mkdir($dir, $permission, true);
+}

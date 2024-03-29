@@ -16,7 +16,7 @@ return array(
           |
          */
 
-            'driver' => 'file',
+            'driver' => 'database',
             /*
           |--------------------------------------------------------------------------
           | Session Database
@@ -69,7 +69,7 @@ return array(
           | The name that should be given to the session cookie.
           |
          */
-            'cookie' => 'bharatphp_session',
+            'cookie' => 'bp235sesjnjk_',
             /*
           |--------------------------------------------------------------------------
           | Session Cookie Path

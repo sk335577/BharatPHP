@@ -72,6 +72,12 @@ return array_replace_recursive(
               |
              */
     'timezone' => 'UTC',
+    'google_recapthca_v3' => [
+
+      'sitekey' => envConfig('GOOGLE_reCAPTCHA_V3_SITE_KEY'),
+
+      'sitesecret' => envConfig('GOOGLE_reCAPTCHA_V3_SITE_SECRET'),
+    ],
   ],
   require BharatPHP_APP_CONFIG_PATH . '/views.php',
   require BharatPHP_APP_CONFIG_PATH . '/auth.php',

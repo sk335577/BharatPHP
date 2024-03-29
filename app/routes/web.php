@@ -3,8 +3,15 @@
 use BharatPHP\Router;
 use BharatPHP\Routes;
 
+
+
+Routes::get('/admin/login', [App\Controllers\Admin\Auth\LoginController::class, 'login'], ['name' => 'show_login_page', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
+Routes::get('/admin/forgot-password', [App\Controllers\Admin\Auth\LoginController::class, 'login'], ['name' => 'show_forgot_password_page', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
+Routes::post('/admin/do-login', [App\Controllers\Admin\Auth\LoginController::class, 'doLogin'], ['name' => 'do_login', 'middleware' => []]);
+Routes::post('/admin/is-2fa-configured', [App\Controllers\Admin\Auth\LoginController::class, 'checkUserHasConfigured2Fa'], ['name' => 'check_user_has_configured_2Fa', 'middleware' => []]);
 //Routes::get('/', [App\Controllers\HomeController::class, 'home'])->middleware();
 Routes::get('/', [App\Controllers\HomeController::class, 'home'], ['name' => 'home', 'middleware' => []]);
+// Routes::get('/', [App\Controllers\HomeController::class, 'home'], ['name' => 'home', 'middleware' => [\App\Middleware\LoadDataSources::class]]);
 Routes::get('/{lang}', [App\Controllers\HomeController::class, 'home'], ['middleware' => []]);
 // Router::get('/register', [Home::class, 'register']);
 // Router::post('/register', [Home::class, 'register']);

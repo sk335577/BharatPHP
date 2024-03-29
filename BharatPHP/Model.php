@@ -5,14 +5,20 @@ namespace BharatPHP;
 use PDO;
 use BharatPHP\Database;
 
-abstract class Model extends Database {
+abstract class Model extends Database
+{
 
-    public static function execute($query, $array = array()) {
+    public static function execute($query, $array = array())
+    {
         $db = self::getDBConnection();
         $stmt = $db->prepare($query);
         $ret = $stmt->execute($array);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        return $stmt;
+        return [
+            'statement' => $stmt,
+            'execution_result' => $ret,
+        ];
+        //        return $stmt;
     }
 
     /**
@@ -21,9 +27,10 @@ abstract class Model extends Database {
      * @param type $array
      * @return type
      */
-    public static function getCount($query, $array = array()) {
+    public static function getCount($query, $array = array())
+    {
         $stmt = static::execute($query, $array);
-        $rows = $stmt->fetch();
+        $rows = $stmt['statement']->fetch();
         return $rows;
     }
 
@@ -33,9 +40,10 @@ abstract class Model extends Database {
      * @param type $array
      * @return type
      */
-    public static function getAll($query, $array = array()) {
+    public static function getAll($query, $array = array())
+    {
         $stmt = static::execute($query, $array);
-        $rows = $stmt->fetchAll();
+        $rows = $stmt['statement']->fetchAll();
         return $rows;
     }
 
@@ -45,9 +53,11 @@ abstract class Model extends Database {
      * @param type $array
      * @return array
      */
-    public static function getOne($query, $array = array()) {
+    public static function getOne($query, $array = array())
+    {
+        //        pd([$query,$array]);
         $stmt = static::execute($query, $array);
-        $row = $stmt->fetch();
+        $row = $stmt['statement']->fetch();
         return $row;
     }
 
@@ -58,7 +68,8 @@ abstract class Model extends Database {
      * @param type $conditions
      * @return type
      */
-    public static function insertOrUpdate($data, $action = 'insert', $conditions = '') {
+    public static function insertOrUpdate($data, $action = 'insert', $conditions = '')
+    {
 
         reset($data);
 
@@ -135,11 +146,11 @@ abstract class Model extends Database {
             $where = implode(' AND ', $where_array);
             $query = "UPDATE " . static::$table . " SET $updatevalues WHERE $where";
         }
-        return static::execute($query, $insertarray);
+        return static::execute($query, $insertarray)['execution_result'];
     }
 
-    public static function getastInsertId() {
+    public static function getastInsertId()
+    {
         return self::getDBConnection()->lastInsertId();
     }
-
 }

@@ -1,0 +1,136 @@
+<div class="login-box">
+    <!-- /.login-logo -->
+    <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+            <a href="<?php printAppUrl(); ?>/backend/assets/index2.html" class="h1"><b>Bharat</b>PHP</a>
+        </div>
+        <div class="card-body">
+
+
+
+            <p class="login-box-msg">Sign in to start your session</p>
+
+
+
+            <form data-gck="<?php echo config('google_recapthca_v3.sitekey'); ?>"
+                action="<?php echo routeNameToURL('do_login') ?>" method="post" id="login-form" class="validation-form">
+                <input type="hidden" disabled autocomplete="off" id="auth_2fa_secret" name="auth_2fa_secret"
+                    class="form-control" placeholder="">
+                <div id="messages" class="mb-12">
+
+
+                    <!-- <div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Something went wrong</div> -->
+
+
+                </div>
+
+                <div class="input-group mb-3 qrcode-scanner-instructions col-auto col" style="display: none;">
+                    <h5><strong>Activate the authenticator App</strong></h5>
+                    <p className="text-muted mx-4">
+                        "Scan this image with the <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&pcampaignid=web_share" target="_blank">Google</a>/<a href="https://play.google.com/store/apps/details?id=com.azure.authenticator&pcampaignid=web_share" target="_blank">Microsoft</a>
+                        App to configure your device."
+                    </p>
+                    <h5>
+                        <strong>Steps to Configure QR Code</strong>
+                    </h5>
+                    <div className="qr_list">
+                        <ul>
+                            <li>
+                                Download and install the <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&pcampaignid=web_share" target="_blank">Google</a>/<a href="https://play.google.com/store/apps/details?id=com.azure.authenticator&pcampaignid=web_share" target="_blank">Microsoft</a>
+                                Authenticator app from your mobile
+                                device's app store
+                            </li>
+                            <li>
+                                Setup a new account using the QR code
+                            </li>
+                            <li>
+                                Under "Authenticator app," tap Set up.On
+                                some devices, under “Authenticator app,”
+                                tap Get Started.
+                            </li>
+                            <li> Follow the on-screen steps.</li>
+                        </ul>
+                    </div>
+                    <div class="qrcode-scanner-steps-img col-md-12"></div>
+                </div>
+                <div class="input-group mb-3 qrcode-otp-instructions col-auto col" style="display: none;">
+                    <h5><strong>One Time Password:</strong></h5>
+                    <p className="text-muted mx-4">
+                        "Please enter the 6 digit code generated on Google/Microsoft Authenticator"
+                    </p>
+
+                    <div class="qrcode-scanner-steps-img col-md-12"></div>
+                </div>
+                <div class="input-group mb-3 qrcode-otp-input" style="display: none;">
+                    <input maxlength="6" type="text" disabled id="auth_2fa_otp" name="auth_2fa_otp" class="form-control"
+                        placeholder="OTP">
+
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3 login-steps">
+                    <input type="email" required id="email" name="email" class="form-control" placeholder="Email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3 login-steps">
+                    <input type="password" id="password" required name="password" class="form-control"
+                        placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary login-steps">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">
+                                Remember Me
+                            </label>
+                        </div>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-4">
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+            <!-- <div class="social-auth-links text-center mt-2 mb-3">
+                <a href="#" class="btn btn-block btn-primary">
+                    <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
+                </a>
+                <a href="#" class="btn btn-block btn-danger">
+                    <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
+                </a>
+            </div> -->
+            <!-- /.social-auth-links -->
+
+            <p class="mb-1">
+                <a href="<?php echo routeNameToURL('show_forgot_password_page') ?>">I forgot my password</a>
+            </p>
+            <p class="mb-0">
+                <a href="<?php echo routeNameToURL('show_register_page') ?>" class="text-center">Register a new
+                    membership</a>
+            </p>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+</div>
+<!-- /.login-box -->
+
+<?php
+injectTemplate("before_body_ends", "auth/login/template-parts/_before_body_ends", "backend");
+injectTemplate("before_head_ends", "auth/login/template-parts/_before_head_ends", "backend");
+injectTemplate("head_title_meta_tags", "auth/login/template-parts/_head_title_meta_tags", "backend");
+?>

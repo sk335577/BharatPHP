@@ -7,15 +7,16 @@ use BharatPHP\Response;
 use BharatPHP\Config;
 use BharatPHP\Session;
 
-class RedirectIfAuthenticated {
+class RedirectIfAuthenticated
+{
 
-    public function execute(Request $request, Response $response) {
+    public function execute(Request $request, Response $response)
+    {
 
         $logged_in_userID = Session::get('loggedInUserID');
 
         if (!is_null($logged_in_userID)) {
-            Response::redirectAndExit(routeNameToURL('list_participants'));
+            Response::redirectAndExit(routeNameToURL('das'));
         }
     }
-
 }

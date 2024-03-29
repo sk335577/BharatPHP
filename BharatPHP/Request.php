@@ -2,7 +2,8 @@
 
 namespace BharatPHP;
 
-class Request {
+class Request
+{
 
     protected $requestUri = null;
     protected $segments = [];
@@ -21,7 +22,8 @@ class Request {
     protected $env = [];
     private array $routeParams = [];
 
-    public function __construct($uri = null, $basePath = null) {
+    public function __construct($uri = null, $basePath = null)
+    {
         $this->setRequestUri($uri, $basePath);
 
         $this->get = (isset($_GET)) ? $_GET : [];
@@ -55,15 +57,25 @@ class Request {
         }
     }
 
-    public function getMethod() {
+    public function isAjax()
+    {
+        if (!isset($_SERVER['HTTP_X_REQUESTED_WITH'])) return false;
+
+        return strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';
+    }
+
+    public function getMethod()
+    {
         return strtolower($_SERVER['REQUEST_METHOD']);
     }
 
-    public function getMethodUpperCase() {
+    public function getMethodUpperCase()
+    {
         return strtoupper($_SERVER['REQUEST_METHOD']);
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         $path = $_SERVER['REQUEST_URI'];
         $position = strpos($path, '?');
         if ($position !== false) {
@@ -71,21 +83,25 @@ class Request {
         }
         return $path;
     }
-    
-        
-        public function getFullBrowserURL() {
-        return $this->appUrl()."".$this->getUrl();
+
+
+    public function getFullBrowserURL()
+    {
+        return $this->appUrl() . "" . $this->getUrl();
     }
 
-    public function isGet() {
+    public function isGet()
+    {
         return $this->getMethod() === 'get';
     }
 
-    public function isPost() {
+    public function isPost()
+    {
         return $this->getMethod() === 'post';
     }
 
-    public function getBody() {
+    public function getBody()
+    {
         $data = [];
         if ($this->isGet()) {
             foreach ($_GET as $key => $value) {
@@ -107,7 +123,8 @@ class Request {
      * @param  mixed   $default
      * @return string|array
      */
-    public function input($key = null, $default = null) {
+    public function input($key = null, $default = null)
+    {
         $input = $this->getBody();
 
         return array_get($input, $key, $default);
@@ -117,20 +134,24 @@ class Request {
      * @param $params
      * @return self
      */
-    public function setRouteParams($params) {
+    public function setRouteParams($params)
+    {
         $this->routeParams = $params;
         return $this;
     }
 
-    public function getRouteParams() {
+    public function getRouteParams()
+    {
         return $this->routeParams;
     }
 
-    public function getRouteParam($param, $default = null) {
+    public function getRouteParam($param, $default = null)
+    {
         return $this->routeParams[$param] ?? $default;
     }
 
-    public function hasFiles() {
+    public function hasFiles()
+    {
         return (count($this->files) > 0);
     }
 
@@ -139,7 +160,8 @@ class Request {
     //     return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'GET'));
     // }
 
-    public function isHead() {
+    public function isHead()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'HEAD'));
     }
 
@@ -148,31 +170,38 @@ class Request {
     //     return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'POST'));
     // }
 
-    public function isPut() {
+    public function isPut()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'PUT'));
     }
 
-    public function isDelete() {
+    public function isDelete()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'DELETE'));
     }
 
-    public function isTrace() {
+    public function isTrace()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'TRACE'));
     }
 
-    public function isOptions() {
+    public function isOptions()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'OPTIONS'));
     }
 
-    public function isConnect() {
+    public function isConnect()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'CONNECT'));
     }
 
-    public function isPatch() {
+    public function isPatch()
+    {
         return (isset($this->server['REQUEST_METHOD']) && ($this->server['REQUEST_METHOD'] == 'PATCH'));
     }
 
-    public function isSecure() {
+    public function isSecure()
+    {
 
 
         $isSecure = false;
@@ -183,30 +212,36 @@ class Request {
         }
         return $isSecure;
 
-//        return (isset($this->server['HTTPS']) || (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')));
+        //        return (isset($this->server['HTTPS']) || (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == '443')));
     }
 
-    public function getBasePath() {
+    public function getBasePath()
+    {
         return $this->basePath;
     }
 
-    public function getRequestUri() {
+    public function getRequestUri()
+    {
         return $this->requestUri;
     }
 
-    public function getFullRequestUri() {
+    public function getFullRequestUri()
+    {
         return $this->basePath . $this->requestUri;
     }
 
-    public function getSegment($i) {
+    public function getSegment($i)
+    {
         return (isset($this->segments[(int) $i])) ? $this->segments[(int) $i] : null;
     }
 
-    public function getSegments() {
+    public function getSegments()
+    {
         return $this->segments;
     }
 
-    public function getDocumentRoot() {
+    public function getDocumentRoot()
+    {
         return (isset($this->server['DOCUMENT_ROOT'])) ? $this->server['DOCUMENT_ROOT'] : null;
     }
 
@@ -215,15 +250,18 @@ class Request {
     //     return (isset($this->server['REQUEST_METHOD'])) ? $this->server['REQUEST_METHOD'] : null;
     // }
 
-    public function getPort() {
+    public function getPort()
+    {
         return (isset($this->server['SERVER_PORT'])) ? $this->server['SERVER_PORT'] : null;
     }
 
-    public function getScheme() {
+    public function getScheme()
+    {
         return ($this->isSecure()) ? 'https' : 'http';
     }
 
-    public function getHost() {
+    public function getHost()
+    {
         $hostname = null;
 
         if (!empty($this->server['HTTP_HOST'])) {
@@ -239,7 +277,8 @@ class Request {
         return $hostname;
     }
 
-    public function getFullHost() {
+    public function getFullHost()
+    {
         $port = $this->getPort();
         $hostname = null;
 
@@ -256,26 +295,28 @@ class Request {
         return $hostname;
     }
 
-    public function getBaseUrl() {
+    public function getBaseUrl()
+    {
         return $this->getScheme() . '://' . $this->getHost();
     }
 
-//    public function appUrl() {
-//        if (isset($_SERVER['HTTPS'])) {
-//            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-//        } else {
-//            $protocol = 'http';
-//        }
-//        // return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-//        return $protocol . "://" . $_SERVER['HTTP_HOST'];
-//    }
+    //    public function appUrl() {
+    //        if (isset($_SERVER['HTTPS'])) {
+    //            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+    //        } else {
+    //            $protocol = 'http';
+    //        }
+    //        // return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    //        return $protocol . "://" . $_SERVER['HTTP_HOST'];
+    //    }
 
-    public function appUrl() {
-//        if (isset($_SERVER['HTTPS'])) {
-//            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-//        } else {
-//            $protocol = 'http';
-//        }
+    public function appUrl()
+    {
+        //        if (isset($_SERVER['HTTPS'])) {
+        //            $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+        //        } else {
+        //            $protocol = 'http';
+        //        }
         if ($this->isSecure()) {
             $protocol = 'https';
         } else {
@@ -285,7 +326,8 @@ class Request {
         return $protocol . "://" . $_SERVER['HTTP_HOST'];
     }
 
-    public function getIp($proxy = true) {
+    public function getIp($proxy = true)
+    {
         $ip = null;
 
         if ($proxy && isset($this->server['HTTP_CLIENT_IP'])) {
@@ -299,7 +341,8 @@ class Request {
         return $ip;
     }
 
-    public function getQuery($key = null) {
+    public function getQuery($key = null)
+    {
         if (null === $key) {
             return $this->get;
         } else {
@@ -307,7 +350,8 @@ class Request {
         }
     }
 
-    public function getPost($key = null) {
+    public function getPost($key = null)
+    {
         if (null === $key) {
             return $this->post;
         } else {
@@ -315,7 +359,8 @@ class Request {
         }
     }
 
-    public function getFiles($key = null) {
+    public function getFiles($key = null)
+    {
         if (null === $key) {
             return $this->files;
         } else {
@@ -323,7 +368,8 @@ class Request {
         }
     }
 
-    public function getPut($key = null) {
+    public function getPut($key = null)
+    {
         if (null === $key) {
             return $this->put;
         } else {
@@ -331,7 +377,8 @@ class Request {
         }
     }
 
-    public function getPatch($key = null) {
+    public function getPatch($key = null)
+    {
         if (null === $key) {
             return $this->patch;
         } else {
@@ -339,7 +386,8 @@ class Request {
         }
     }
 
-    public function getDelete($key = null) {
+    public function getDelete($key = null)
+    {
         if (null === $key) {
             return $this->delete;
         } else {
@@ -347,7 +395,8 @@ class Request {
         }
     }
 
-    public function getCookie($key = null) {
+    public function getCookie($key = null)
+    {
         if (null === $key) {
             return $this->cookie;
         } else {
@@ -355,7 +404,8 @@ class Request {
         }
     }
 
-    public function getServer($key = null) {
+    public function getServer($key = null)
+    {
         if (null === $key) {
             return $this->server;
         } else {
@@ -363,7 +413,8 @@ class Request {
         }
     }
 
-    public function getEnv($key = null) {
+    public function getEnv($key = null)
+    {
         if (null === $key) {
             return $this->env;
         } else {
@@ -371,7 +422,8 @@ class Request {
         }
     }
 
-    public function getParsedData($key = null) {
+    public function getParsedData($key = null)
+    {
         $result = null;
 
         if ((null !== $this->parsedData) && is_array($this->parsedData)) {
@@ -385,24 +437,29 @@ class Request {
         return $result;
     }
 
-    public function getHeader($key) {
+    public function getHeader($key)
+    {
         return (isset($this->headers[$key])) ? $this->headers[$key] : null;
     }
 
-    public function getHeaders() {
+    public function getHeaders()
+    {
         return $this->headers;
     }
 
-    public function getRawData() {
+    public function getRawData()
+    {
         return $this->rawData;
     }
 
-    public function setBasePath($path = null) {
+    public function setBasePath($path = null)
+    {
         $this->basePath = $path;
         return $this;
     }
 
-    public function setRequestUri($uri = null, $basePath = null) {
+    public function setRequestUri($uri = null, $basePath = null)
+    {
         if ((null === $uri) && isset($_SERVER['REQUEST_URI'])) {
             $uri = $_SERVER['REQUEST_URI'];
         }
@@ -445,7 +502,8 @@ class Request {
         return $this;
     }
 
-    public function __get($name) {
+    public function __get($name)
+    {
         switch ($name) {
             case 'get':
                 return $this->get;
@@ -485,7 +543,8 @@ class Request {
         }
     }
 
-    protected function parseData() {
+    protected function parseData()
+    {
         if (strtoupper($this->getMethod()) == 'GET') {
             $this->rawData = (isset($_SERVER['QUERY_STRING'])) ? rawurldecode($_SERVER['QUERY_STRING']) : null;
         } else {
@@ -505,9 +564,9 @@ class Request {
 
             foreach ($matches[0] as $match) {
                 $strip = str_replace(
-                        ['<![CDATA[', ']]>', '<', '>'],
-                        ['', '', '&lt;', '&gt;'],
-                        $match
+                    ['<![CDATA[', ']]>', '<', '>'],
+                    ['', '', '&lt;', '&gt;'],
+                    $match
                 );
                 $this->rawData = str_replace($match, $strip, $this->rawData);
             }
@@ -515,7 +574,7 @@ class Request {
             $this->parsedData = json_decode(json_encode((array) simplexml_load_string($this->rawData)), true);
             // Else, default to a regular URL-encoded string
         } else {
-//            parse_str($this->rawData, $this->parsedData);
+            //            parse_str($this->rawData, $this->parsedData);
             if (!is_null($this->rawData)) {
                 parse_str($this->rawData, $this->parsedData);
             }
@@ -545,5 +604,4 @@ class Request {
                 break;
         }
     }
-
 }

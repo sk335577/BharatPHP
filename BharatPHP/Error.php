@@ -5,7 +5,8 @@ namespace BharatPHP;
 use BharatPHP\Config;
 use BharatPHP\Log;
 
-class Error {
+class Error
+{
 
     /**
      * Handle an exception and display the exception report.
@@ -14,7 +15,8 @@ class Error {
      * @param  bool       $trace
      * @return void
      */
-    public static function exception($exception, $trace = true) {
+    public static function exception($exception, $trace = true)
+    {
         static::log($exception);
 
         ob_get_level() and ob_end_clean();
@@ -55,20 +57,20 @@ class Error {
 
                 app()->response()->setCode(500);
                 app()->response()->setBody(view($error_view_info['path'], $error_view_info['params'], $error_view_info['layout']));
-//                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
+                //                    return view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']);
             } else {
                 $response = app()->events()->trigger('500', array($exception));
                 app()->response()->setBody($response);
             }
 
             //
-//            app()->response()->setCode(500);
-//            app()->response()->setBody(view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']));
-//            app()->response()->setCode(500);
-//            $response = Event::first('500', array($exception));
-//            app()->response()->setBody($response);
-//            app()->response()->setCode(500);
-//            $response = Response::prepare($response);
+            //            app()->response()->setCode(500);
+            //            app()->response()->setBody(view($error_404_view['path'], $error_404_view['params'], $error_404_view['layout']));
+            //            app()->response()->setCode(500);
+            //            $response = Event::first('500', array($exception));
+            //            app()->response()->setBody($response);
+            //            app()->response()->setCode(500);
+            //            $response = Response::prepare($response);
         }
 
 
@@ -86,7 +88,8 @@ class Error {
      * @param  int     $line
      * @return void
      */
-    public static function native($code, $error, $file, $line) {
+    public static function native($code, $error, $file, $line)
+    {
 
         if (error_reporting() === 0)
             return;
@@ -96,9 +99,9 @@ class Error {
         // of the exception details for the developer.
         $exception = new \ErrorException($error, $code, 0, $file, $line);
 
-//        if (in_array($code, Config::get('error.ignore'))) {
-//            return static::log($exception);
-//        }
+        //        if (in_array($code, Config::get('error.ignore'))) {
+        //            return static::log($exception);
+        //        }
 
         static::exception($exception);
     }
@@ -108,7 +111,8 @@ class Error {
      *
      * @return void
      */
-    public static function shutdown() {
+    public static function shutdown()
+    {
         // If a fatal error occurred that we have not handled yet, we will
         // create an ErrorException and feed it to the exception handler,
         // as it will not yet have been handled.
@@ -127,9 +131,10 @@ class Error {
      * @param  Exception  $exception
      * @return void
      */
-    public static function log($exception) {
+    public static function log($exception)
+    {
         if (Config::get('error.log')) {
-//            call_user_func(Config::get('error.logger'), $exception);
+            //            call_user_func(Config::get('error.logger'), $exception);
             Log::exception($exception);
         }
     }
@@ -144,11 +149,11 @@ class Error {
      *
      * @return void
      */
-//    public static function errorHandler($level, $message, $file, $line) {
-//        if (error_reporting() !== 0) {  // to keep the @ operator working
-//            throw new \ErrorException($message, 0, $level, $file, $line);
-//        }
-//    }
+    //    public static function errorHandler($level, $message, $file, $line) {
+    //        if (error_reporting() !== 0) {  // to keep the @ operator working
+    //            throw new \ErrorException($message, 0, $level, $file, $line);
+    //        }
+    //    }
 
     /**
      * Exception handler.
@@ -157,28 +162,28 @@ class Error {
      *
      * @return void
      */
-//    public static function exceptionHandler($exception) {
-//        // Code is 404 (not found) or 500 (general error)
-//        $code = $exception->getCode();
-//        if ($code != 404) {
-//            $code = 500;
-//        }
-//        http_response_code($code);
-//        if (Config::SHOW_ERRORS) {
-//            echo "<h1>Fatal error</h1>";
-//            echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
-//            echo "<p>Message: '" . $exception->getMessage() . "'</p>";
-//            echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
-//            echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
-//        } else {
-//            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
-//            ini_set('error_log', $log);
-//            $message = "Uncaught exception: '" . get_class($exception) . "'";
-//            $message .= " with message '" . $exception->getMessage() . "'";
-//            $message .= "\nStack trace: " . $exception->getTraceAsString();
-//            $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
-//            error_log($message);
-//            View::renderTemplate("$code.html");
-//        }
-//    }
+    //    public static function exceptionHandler($exception) {
+    //        // Code is 404 (not found) or 500 (general error)
+    //        $code = $exception->getCode();
+    //        if ($code != 404) {
+    //            $code = 500;
+    //        }
+    //        http_response_code($code);
+    //        if (Config::SHOW_ERRORS) {
+    //            echo "<h1>Fatal error</h1>";
+    //            echo "<p>Uncaught exception: '" . get_class($exception) . "'</p>";
+    //            echo "<p>Message: '" . $exception->getMessage() . "'</p>";
+    //            echo "<p>Stack trace:<pre>" . $exception->getTraceAsString() . "</pre></p>";
+    //            echo "<p>Thrown in '" . $exception->getFile() . "' on line " . $exception->getLine() . "</p>";
+    //        } else {
+    //            $log = dirname(__DIR__) . '/logs/' . date('Y-m-d') . '.txt';
+    //            ini_set('error_log', $log);
+    //            $message = "Uncaught exception: '" . get_class($exception) . "'";
+    //            $message .= " with message '" . $exception->getMessage() . "'";
+    //            $message .= "\nStack trace: " . $exception->getTraceAsString();
+    //            $message .= "\nThrown in '" . $exception->getFile() . "' on line " . $exception->getLine();
+    //            error_log($message);
+    //            View::renderTemplate("$code.html");
+    //        }
+    //    }
 }

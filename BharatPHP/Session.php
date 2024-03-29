@@ -136,7 +136,7 @@ class Session
      * @param  Closure  $resolver
      * @return void
      */
-    public static function extend($driver, Closure $resolver)
+    public static function extend($driver, \Closure $resolver)
     {
         static::$registrar[$driver] = $resolver;
     }
