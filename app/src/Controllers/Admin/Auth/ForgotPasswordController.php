@@ -19,79 +19,78 @@ class ForgotPasswordController extends Controller
     public function doForgotPassword()
     {
 
-
-
         $post_data = (request()->getPost());
 
-        // Storing google recaptcha response
-        // in $recaptcha variable
-        $recaptcha = $post_data['gcaptcha_token'];
 
-        // Put secret key here, which we get
-        // from google console
-        $secret_key = Config::get('google_recapthca_v3.sitesecret');
+        $errors = [];
 
-        // Hitting request to the URL, Google will
-        // respond with success or error scenario
-        $url = 'https://www.google.com/recaptcha/api/siteverify?secret='
-            . $secret_key . '&response=' . $recaptcha;
 
-        // Making request to verify captcha
-        $gresponse = file_get_contents($url);
+        $form_fields = [
+            'email',
+            'gcaptcha_token',
+        ];
 
-        // Response return by google is in
-        // JSON format, so we have to parse
-        // that json
-        $gresponse = json_decode($gresponse);
+        foreach ($post_data as $form_key => $form_value) {
+            if (!in_array($form_key, $form_fields)) {
+                // $errors[] = 'Invalid form fields.';
+                $errors[] = 'Invalid login details';
+            }
+        }
 
-        // Checking, if response is true or not
-        if (isset($gresponse->success) && $gresponse->success == true) {
-        } else {
-            return json(['status' => 'error', 'message' => 'Invalid form']);
+        if (!empty($errors)) {
+            return json([
+                'status' => 'error',
+                'message' => $errors
+            ]);
+        }
+
+        if (!validateGoogleCaptch('gcaptcha_token')) {
+            $errors[] = 'Invalid login details';
+        }
+
+        if (!validateEmail('email')) {
+            $errors[] = 'Invalid login details';
         }
 
 
+
+        if (!empty($errors)) {
+            return json([
+                'status' => 'error',
+                'message' => $errors
+            ]);
+        }
+
         $user = Users::getUserByEmail($post_data['email']);
 
-        if (!empty($user)) {
 
-            while (1) {
-                $secret = '';
-                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                $charactersLength = strlen($characters);
-                for ($i = 0; $i < 20; $i++) {
-                    $secret .= $characters[mt_rand(0, ($charactersLength - 1))];
-                }
-                $is_secret_exists = Users::getUserByResetPasswordSecret($secret);
-                if (empty($is_secret_exists)) {
-                    break;
-                }
-            }
-
-
-
-            Users::updateUserByUserID($user['id'], ['reset_password_secret' => $secret]);
-            // Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => time()]);
-            Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => date('Y-m-d H:i:s')]);
-
-            $email_vars = array(
-                'secret' => $secret,
-                'base_url' => appUrl(),
-            );
-
-            $body = file_get_contents(BharatPHP_VIEW_PATH . '/backend/auth/forgot-password/email-templates/otp.phtml');
-
-            if (isset($email_vars)) {
-                foreach ($email_vars as $k => $v) {
-                    $body = str_replace('{' . ($k) . '}', $v, $body);
-                }
-            }
-
-            Email::sendEmail($post_data['email'], 'Secret Code - Reset Password - ' . Config::get('app_title'), $body);
+        if (empty($user)) {
             return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
         }
 
 
+
+        while (1) {
+            $secret = randomTextGenerator(6);
+            $is_secret_exists = Users::getUserByResetPasswordSecret($secret);
+            if (empty($is_secret_exists)) {
+                break;
+            }
+        }
+
+
+
+        Users::updateUserByUserID($user['id'], ['reset_password_secret' => $secret]);
+        Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => date('Y-m-d H:i:s')]);
+
+        $email_vars = array(
+            // 'secret' => $secret,
+            'otp' => $secret,
+            'base_url' => appUrl(),
+        );
+        $body = getViewFileContentsWithPlaceholders('backend/auth/forgot-password/email-templates/otp.phtml', $email_vars);
+
+        Email::sendEmail($post_data['email'], 'Secret Code - Reset Password - ' . Config::get('app_title'), $body);
         return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
     }
 

@@ -818,3 +818,104 @@ function hashBcryptVerify($s, $hash)
     // $b = new BcryptHasher();
     return app()->services()->get('hasher_bcrypt')->check($s, $hash);
 }
+
+function randomTextGenerator($length, $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+{
+    $secret = '';
+    // $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    $charactersLength = strlen($characters);
+    for ($i = 0; $i < $length; $i++) {
+        $secret .= $characters[mt_rand(0, ($charactersLength - 1))];
+    }
+    return $secret;
+}
+
+function validateEmail($email_key_name_in_form_request)
+{
+
+    $post_data = (request()->getPost());
+
+
+    if (!isset($post_data[$email_key_name_in_form_request]) || empty($post_data[$email_key_name_in_form_request])) {
+        // $errors[] = 'Invalid email';
+        // $errors[] = 'Invalid login details';
+        return false;
+    } else {
+        if (!filter_var($post_data[$email_key_name_in_form_request], FILTER_VALIDATE_EMAIL)) {
+            // $errors[] = 'Invalid email';
+            // $errors[] = 'Invalid login details';
+            return false;
+        } else {
+            if (preg_match("#^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$#", $post_data[$email_key_name_in_form_request]) !== 1) {
+                // $errors[] = 'Invalid email';
+                // $errors[] = 'Invalid login details';
+                return false;
+            } else {
+                //                    if (preg_match("#[._-]@#", $post_data['email']) == 1) {
+                //                        $errors[] = 'Invalid email';
+                //                    } else {
+                //                        if (preg_match("#^[._-]#", $post_data['email']) == 1) {
+                //                            $errors[] = 'Invalid email';
+                //                        }
+                //                    }
+            }
+        }
+    }
+    return true;
+}
+function validateGoogleCaptch($captcha_key_name_in_form_request)
+{
+
+    $post_data = (request()->getPost());
+
+    // if (isset($post_data['gcaptcha_token']) && !empty($post_data['gcaptcha_token'])) {
+    if (isset($post_data[$captcha_key_name_in_form_request]) && !empty($post_data[$captcha_key_name_in_form_request])) {
+
+        // Storing google recaptcha response
+        // in $recaptcha variable
+        $recaptcha = $post_data[$captcha_key_name_in_form_request];
+
+        // Put secret key here, which we get
+        // from google console
+        $secret_key = Config::get('google_recapthca_v3.sitesecret');
+
+        // Hitting request to the URL, Google will
+        // respond with success or error scenario
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret='
+            . $secret_key . '&response=' . $recaptcha;
+
+
+        // Making request to verify captcha
+        $gresponse = file_get_contents($url);
+
+        // Response return by google is in
+        // JSON format, so we have to parse
+        // that json
+        $gresponse = json_decode($gresponse);
+
+
+        // Checking, if response is true or not
+        if (isset($gresponse->success) && $gresponse->success == true) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function getViewFileContents($view)
+{
+    // return BharatPHP_VIEW_PATH . '/backend/auth/forgot-password/email-templates/otp.phtml';
+    return file_get_contents(BharatPHP_VIEW_PATH . '/' . $view);
+}
+
+function getViewFileContentsWithPlaceholders($view, $email_vars)
+{
+    // return BharatPHP_VIEW_PATH . '/backend/auth/forgot-password/email-templates/otp.phtml';
+    $body = file_get_contents(BharatPHP_VIEW_PATH . '/' . $view);
+    if (isset($email_vars)) {
+        foreach ($email_vars as $k => $v) {
+            $body = str_replace('{' . ($k) . '}', $v, $body);
+        }
+    }
+    return $body;
+}
