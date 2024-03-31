@@ -23,66 +23,13 @@ return
 
 			'username' => 'email',
 
-			/*
-	|--------------------------------------------------------------------------
-	| Retrieve The Current User
-	|--------------------------------------------------------------------------
-	|
-	| This closure is called by the Auth::user() method when attempting to
-	| retrieve a user by their ID stored in the session.
-	|
-	| Simply return an object representing the user with the given ID. Or, if
-	| no user with the given ID is registered to use your application, you do
-	| not need to return anything.
-	|
-	| Of course, a simple, elegant authentication solution is already provided
-	| for you using Eloquent and the default Laravel hashing engine.
-	|
-	*/
+			'use_password_expiration' => true, //90 days
+			'use_user_lock_after_failed_password_attemps' => true, //90 days
+			// 'password_expiration_days' => '7776000', //90 days
+			'password_expiration_days' => 86400 * envConfig('USER_PASSWORD_EXPIRE_TIME_IN_DAYS', 90), //90 days
+			'failed_password_locked_minutes' => 5 * 60, 
+			'lock_account_after_failed_password_attemps' => 5, //90 days
 
-			'user' => function ($id) {
-				if (!is_null($id) and filter_var($id, FILTER_VALIDATE_INT) !== false) {
-					return Users::getUserByUserID($id);
-				}
-			},
-
-			/*
-	|--------------------------------------------------------------------------
-	| Authenticate User Credentials
-	|--------------------------------------------------------------------------
-	|
-	| This closure is called by the Auth::attempt() method when attempting to
-	| authenticate a user that is logging into your application.
-	|
-	| If the provided credentials are correct, simply return an object that
-	| represents the user being authenticated. If the credentials are not
-	| valid, don't return anything.
-	|
-	| Note: If a user object is returned, it must have an "id" property.
-	|
-	*/
-
-			'attempt' => function ($username, $password, $config) {
-				$user = Users::getUserByUsername($config['username']);
-
-				if (!is_null($user) and Hash::check($password, $user->password)) {
-					return $user;
-				}
-			},
-
-			/*
-	|--------------------------------------------------------------------------
-	| Logout
-	|--------------------------------------------------------------------------
-	|
-	| Here you may do anything that needs to be done when a user logs out of
-	| your application, such as call the logout method on a third-party API
-	| you are using for authentication, or anything else you desire.
-	|
-	*/
-
-			'logout' => function ($user) {
-			}
 
 		]
 	];

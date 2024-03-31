@@ -2,10 +2,12 @@
 
 use BharatPHP\Config;
 use BharatPHP\Application;
+use BharatPHP\CrypterV2;
 use BharatPHP\Translator;
 use BharatPHP\Session;
 use BharatPHP\HTML;
 use BharatPHP\URL;
+use BharatPHP\Hash\BcryptHasher;
 
 function setConfig($path, $value)
 {
@@ -779,4 +781,40 @@ function prepareUploadDirectory()
 {
 
     // return mkdir($dir, $permission, true);
+}
+
+function encryptArray($array)
+{
+    $cr = new CrypterV2(config('application_key'));
+    return $cr->encrypt($array, true);
+    //  $c = $cr->decrypt($c);
+}
+function decryptArray($encrypted_array)
+{
+    $cr = new CrypterV2(config('application_key'));
+    return  $cr->decrypt($encrypted_array, true);
+}
+
+function encryptString($s)
+{
+    $cr = new CrypterV2(config('application_key'));
+    return $cr->encrypt($s, false);
+    //  $c = $cr->decrypt($c);
+}
+function decryptString($s)
+{
+    $cr = new CrypterV2(config('application_key'));
+    return  $cr->decrypt($s, true);
+}
+function hashBcrypt($s)
+{
+
+    return app()->services()->get('hasher_bcrypt')->make($s);
+    // $b = new BcryptHasher();
+    // return  $b->make($s);
+}
+function hashBcryptVerify($s, $hash)
+{
+    // $b = new BcryptHasher();
+    return app()->services()->get('hasher_bcrypt')->check($s, $hash);
 }

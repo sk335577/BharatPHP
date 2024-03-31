@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 
 use App\Models\Users;
 use App\Helpers\Utilities;
+use App\Services\Email;
 use BharatPHP\Auth;
 use BharatPHP\Config;
 use PragmaRX\Google2FA\Google2FA;
@@ -19,13 +20,91 @@ class ForgotPasswordController extends Controller
     {
 
 
+
+        $post_data = (request()->getPost());
+
+        // Storing google recaptcha response
+        // in $recaptcha variable
+        $recaptcha = $post_data['gcaptcha_token'];
+
+        // Put secret key here, which we get
+        // from google console
+        $secret_key = Config::get('google_recapthca_v3.sitesecret');
+
+        // Hitting request to the URL, Google will
+        // respond with success or error scenario
+        $url = 'https://www.google.com/recaptcha/api/siteverify?secret='
+            . $secret_key . '&response=' . $recaptcha;
+
+        // Making request to verify captcha
+        $gresponse = file_get_contents($url);
+
+        // Response return by google is in
+        // JSON format, so we have to parse
+        // that json
+        $gresponse = json_decode($gresponse);
+
+        // Checking, if response is true or not
+        if (isset($gresponse->success) && $gresponse->success == true) {
+        } else {
+            return json(['status' => 'error', 'message' => 'Invalid form']);
+        }
+
+
+        $user = Users::getUserByEmail($post_data['email']);
+
+        if (!empty($user)) {
+
+            while (1) {
+                $secret = '';
+                $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                $charactersLength = strlen($characters);
+                for ($i = 0; $i < 20; $i++) {
+                    $secret .= $characters[mt_rand(0, ($charactersLength - 1))];
+                }
+                $is_secret_exists = Users::getUserByResetPasswordSecret($secret);
+                if (empty($is_secret_exists)) {
+                    break;
+                }
+            }
+
+
+
+            Users::updateUserByUserID($user['id'], ['reset_password_secret' => $secret]);
+            // Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => time()]);
+            Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => date('Y-m-d H:i:s')]);
+
+            $email_vars = array(
+                'secret' => $secret,
+                'base_url' => appUrl(),
+            );
+
+            $body = file_get_contents(BharatPHP_VIEW_PATH . '/backend/auth/forgot-password/email-templates/otp.phtml');
+
+            if (isset($email_vars)) {
+                foreach ($email_vars as $k => $v) {
+                    $body = str_replace('{' . ($k) . '}', $v, $body);
+                }
+            }
+
+            Email::sendEmail($post_data['email'], 'Secret Code - Reset Password - ' . Config::get('app_title'), $body);
+            return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
+        }
+
+
+        return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
+    }
+
+    public function doResetPassword()
+    {
+
         if (request()->isPost()) {
 
             $post_data = (request()->getPost());
 
             // Storing google recaptcha response
             // in $recaptcha variable
-            $recaptcha = $post_data['g-recaptcha-response'];
+            $recaptcha = $post_data['gcaptcha_token'];
 
             // Put secret key here, which we get
             // from google console
@@ -57,7 +136,8 @@ class ForgotPasswordController extends Controller
             switch ($post_data['action_type']) {
 
                 case 'FORGOT_PASSWORD':
-                    $user = Users::getUserByUsername($post_data['email']);
+
+                    $user = Users::getUserByEmail($post_data['email']);
 
                     if (!empty($user)) {
 
@@ -65,7 +145,7 @@ class ForgotPasswordController extends Controller
                             $secret = '';
                             $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                             $charactersLength = strlen($characters);
-                            for ($i = 0; $i < 6; $i++) {
+                            for ($i = 0; $i < 20; $i++) {
                                 $secret .= $characters[mt_rand(0, ($charactersLength - 1))];
                             }
                             $is_secret_exists = Users::getUserByResetPasswordSecret($secret);
@@ -201,6 +281,6 @@ class ForgotPasswordController extends Controller
 
     public function showForgotPasswordPage()
     {
-        return response(view('auth/forgot_password', [], $layout = 'layouts/forgot-password', $viewtype = 'backend'));
+        return response(view('auth/forgot-password/forgot-password', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }

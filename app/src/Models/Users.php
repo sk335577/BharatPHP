@@ -45,6 +45,11 @@ class Users extends Model
         return parent::getOne('select * from ' . self::$table . ' WHERE username=:username ', ['username' => $user_name]);
     }
 
+    public static function getUserByEmail($email)
+    {
+        return parent::getOne('select * from ' . self::$table . ' WHERE email=:email ', ['email' => $email]);
+    }
+
     public static function getUserByUsernameAndPassword($user_name, $password)
     {
         return parent::getOne('select * from ' . self::$table . ' WHERE username=:username AND password=:password', ['username' => $user_name, 'password' => $password]);

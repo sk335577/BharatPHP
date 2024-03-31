@@ -12,8 +12,10 @@ use PragmaRX\Google2FA\Google2FA;
 use BharatPHP\Response;
 use BharatPHP\Session;
 use BharatPHP\Cookie;
+use BharatPHP\Crypter;
+use BharatPHP\CrypterV2;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
 
     public function logout()
@@ -30,15 +32,9 @@ class LoginController extends Controller
     public function doLogin()
     {
 
-        $post_data = (request()->getPost());
+        $post_data = (request()->getPostSanitized());
 
 
-
-        foreach ($post_data as $form_key => $form_value) {
-            $post_data[$form_key] = trim($form_value);
-        }
-
-        // pd($post_data);
 
         $errors = [];
 
@@ -139,23 +135,23 @@ class LoginController extends Controller
         }
 
 
-
-        //Check limit login
-        // At the top of page right after session_start();
-        if ((Session::has("user_ac_locked"))) {
-            $difference = time() - Session::get("user_ac_locked");
-            if ($difference > 300) {
-                Session::forget("user_ac_locked");
-                Session::forget("user_ac_login_attempts");
+        if (config('auth.use_user_lock_after_failed_password_attemps')) {
+            //Check limit login
+            // At the top of page right after session_start();
+            if ((Session::has("user_ac_locked"))) {
+                $difference = time() - Session::get("user_ac_locked");
+                if ($difference > config('auth.failed_password_locked_minutes')) {
+                    Session::forget("user_ac_locked");
+                    Session::forget("user_ac_login_attempts");
+                }
             }
-        }
 
-        if (Session::get("user_ac_login_attempts") > 2) {
-            Session::put("user_ac_locked", time());
-            return json(['status' => 'error', 'message' => ['Login blocked for 5 minutes']]);
+            if (Session::get("user_ac_login_attempts") > config('auth.lock_account_after_failed_password_attemps')) {
+                Session::put("user_ac_locked", time());
+                return json(['status' => 'error', 'message' => ['Login blocked for ' . config('auth.failed_password_locked_minutes') . ' minutes']]);
+            }
+            // }
         }
-        // }
-
 
 
 
@@ -172,17 +168,21 @@ class LoginController extends Controller
 
         if (!empty($user)) {
 
-            // if (empty($user['last_password_update_timestamp'])) {
-            //     $user['last_password_update_timestamp'] = 0;
-            // } else {
-            //     $user['last_password_update_timestamp'] = (int) ($user['last_password_update_timestamp']);
-            // }
 
-            // if ((time() - ($user['last_password_update_timestamp'])) > 7884000) {
-            //     return json(['status' => 'error', 'message' => 'Your password is expired. Please reset your password']);
-            // }
+            if (config('auth.use_password_expiration')) {
+                if (config('auth.password_expiration_days') > 0) {
+                    if (empty($user['last_password_update_timestamp'])) {
+                        $user['last_password_update_timestamp'] = 0;
+                    } else {
+                        $timestamp_password = strtotime($user['last_password_update_timestamp']);
+                        $user['last_password_update_timestamp'] = (int) ($timestamp_password);
+                    }
 
-
+                    if ((time() - ($user['last_password_update_timestamp'])) > config('auth.password_expiration_days')) {
+                        return json(['status' => 'error', 'message' => ['Your password is expired. Please reset your password by using forgot password page']]);
+                    }
+                }
+            }
 
 
 
@@ -270,7 +270,9 @@ class LoginController extends Controller
 
             return json(['status' => 'success', 'data' => ['is_google_2fa_valid' => 1]]);
         } else {
-            Session::put("user_ac_login_attempts", (Session::get("user_ac_login_attempts", 0) + 1));
+            if (config('auth.use_user_lock_after_failed_password_attemps')) {
+                Session::put("user_ac_login_attempts", (Session::get("user_ac_login_attempts", 0) + 1));
+            }
         }
 
         return json(['status' => 'error', 'message' => ['Invalid login details']]);
@@ -279,7 +281,13 @@ class LoginController extends Controller
 
     public function login()
     {
-        // Session::put("xxx", 's');
+        // echo hashBcrypt('sandeep');
+        // $cr=new CrypterV2('7777777777777777');
+        // echo $c = $cr->encrypt("abc");
+        //  $c = $cr->decrypt($c);
+        // Session::put('xx', 'fff');
+        // print_r(Session::getAll());
+        // print_r(config('session'));
         return response(view('auth/login/login', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }

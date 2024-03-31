@@ -1,0 +1,145 @@
+<script src="<?php printAppUrl(); ?>/backend/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="<?php printAppUrl(); ?>/backend/assets/plugins/jquery-validation/additional-methods.min.js"></script>
+<script src="<?php printAppUrl(); ?>/backend/assets/js/validations.js"></script>
+<script
+    src="https://www.google.com/recaptcha/api.js?render=<?php echo config('google_recapthca_v3.sitekey'); ?>"></script>
+
+<script>
+    (function ($) {
+
+
+        var current_page_visible_area = "LOGIN";
+
+
+        $("form#login-form").submit(function (e) {
+
+            e.preventDefault();
+
+            var form = this;
+
+            if (!$(this).valid()) {
+                return;
+            }
+
+
+            grecaptcha.ready(function () {
+
+                grecaptcha.execute($('form#login-form').data('gck'), {
+                    action: 'submit'
+                }).then(function (token) {
+
+
+                    // var formData = new FormData(this);
+                    var formData = $(form).serializeArray();
+
+                    formData.push({
+                        name: 'gcaptcha_token',
+                        value: token
+                    });
+
+
+                    // formData.push({
+                    //     name: 'auth_action_type',
+                    //     value: 'LOGIN'
+                    // });
+
+                    var current_this = this;
+
+
+                    $("form#login-form").find("input[type='submit']").text("Submitting").attr("disabled", "disabled");
+                    $("form#login-form").find("#messages .alert").remove();
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "<?php echo routeNameToURL('do_forgot_password') ?>",
+                        dataType: "json",
+                        // dataType: "json",
+                        // processData: false,
+                        // contentType: false,
+                        data: formData,
+                        success: function (response) {
+                            try {
+
+                                if (response.status) {
+
+                                    if (response.status == "success") {
+
+
+
+                                        // $("form#login-form")[0].reset();
+                                    } else {
+
+                                        if (typeof response["message"] != "undefined") {
+                                            if ($.isArray(response.message)) {
+                                                $.each(response.message, function (index, message) {
+                                                    $("form#login-form").find("#messages").append(
+                                                        '<div data-alert class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                                                        message +
+                                                        '</div>'
+                                                    );
+                                                });
+                                            } else {
+
+                                                $("form#login-form").find("#messages").append(
+                                                    '<div data-alert class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
+                                                    response.message +
+                                                    '</div>'
+                                                );
+
+
+                                            }
+
+                                            $("html, body")
+
+                                                .stop()
+
+                                                .animate({ scrollTop: $(".login-box").offset().top }, 500, "swing", function () { });
+                                        }
+
+
+
+
+
+                                    }
+                                }
+
+                            } catch (error) {
+                                console.log(error);
+                                $("form#login-form").find("#messages").append('<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Something went wrong</div>');
+                            }
+
+                        },
+                        error: function (response) {
+
+                            $("form#login-form").find("#messages").append('<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Something went wrong</div>');
+                        },
+
+                        complete: function () {
+                            $('body').Layout('fixLoginRegisterHeight');
+
+                            // setTimeout(function () {
+                            //     $('body').Layout('fixLoginRegisterHeight');
+                            // }, 4000);
+                            // $("img").load(function () {
+                            //     $('body').Layout('fixLoginRegisterHeight');
+                            // });
+
+
+                            // grecaptcha.reset();
+                            $("form#login-form").find("input[type='submit']").text("Submit").removeAttr("disabled");
+                        },
+                    });
+
+
+                });
+            });
+
+
+        });
+
+
+
+
+    })(jQuery)
+</script>

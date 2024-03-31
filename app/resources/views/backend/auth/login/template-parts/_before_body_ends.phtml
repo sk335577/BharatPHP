@@ -98,7 +98,7 @@
                                         }
 
 
-                                        if (response.data.is_2fa_configured == 0) {
+                                        if (typeof response["data"] != "undefined" && typeof response["data"]['is_2fa_configured'] != "undefined" && response.data.is_2fa_configured == 0) {
 
 
                                             console.log(response['data']['2fa_img']);
@@ -129,7 +129,7 @@
 
                                         } else {
 
-                                            if (response.data.is_2fa_otp_valid == 0) {
+                                            if (typeof response["data"] != "undefined" && typeof response["data"]['is_2fa_otp_valid'] != "undefined" && response.data.is_2fa_otp_valid == 0) {
                                                 // $('.qrcode-scanner-steps').show();
                                                 $('.qrcode-otp-instructions,.qrcode-otp-input').show();
                                                 $('#auth_2fa_otp').removeAttr('disabled');
@@ -142,8 +142,8 @@
                                                     digits: true
                                                 });
 
-                                                
-                                                
+
+
                                             } else {
                                                 // window.location.href = "<?php echo routeNameToURL('home'); ?>";
                                             }
@@ -157,6 +157,7 @@
                                 }
 
                             } catch (error) {
+                                console.log(error);
                                 $("form#login-form").find("#messages").append('<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Something went wrong</div>');
                             }
 

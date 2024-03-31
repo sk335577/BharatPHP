@@ -599,7 +599,7 @@ class Response
                 if (is_null($cookie['domain'])) {
                     $cookie['domain'] = '';
                 }
-                setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure']);
+                setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure'],$cookie['httponly']);
             }
         }
 

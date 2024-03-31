@@ -6,8 +6,10 @@ use BharatPHP\Config;
 use BharatPHP\Database\Connection;
 use BharatPHP\Session\Drivers\Driver;
 use PDO;
+use BharatPHP\Session\Drivers\Sweeper;
 
-class Database extends Driver {
+class Database extends Driver implements Sweeper
+{
 
     /**
      * The database connection.
@@ -22,7 +24,8 @@ class Database extends Driver {
      * @param  Connection  $connection
      * @return void
      */
-    public function __construct($connection) {
+    public function __construct($connection)
+    {
         $this->connection = $connection;
     }
 
@@ -34,7 +37,8 @@ class Database extends Driver {
      * @param  string  $id
      * @return array
      */
-    public function load($id) {
+    public function load($id)
+    {
 
         $statement = $this->connection->query('SELECT * FROM ' . config('session.table') . ' WHERE id="' . $id . '"');
         $session = $statement->fetch(PDO::FETCH_OBJ);
@@ -56,7 +60,8 @@ class Database extends Driver {
      * @param  bool   $exists
      * @return void
      */
-    public function save($session, $config, $exists) {
+    public function save($session, $config, $exists)
+    {
         if ($exists) {
 
             $statement = $this->connection->prepare(' UPDATE ' . config('session.table') . ' set last_activity=:last_activity, data=:data where id=:id ');
@@ -83,7 +88,8 @@ class Database extends Driver {
      * @param  string  $id
      * @return void
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->table()->delete($id);
     }
 
@@ -93,8 +99,16 @@ class Database extends Driver {
      * @param  int   $expiration
      * @return void
      */
-    public function sweep($expiration) {
-        $this->table()->where('last_activity', '<', $expiration)->delete();
+    public function sweep($expiration)
+    {
+        $statement = $this->connection->prepare('DELETE FROM  ' . config('session.table') . ' WHERE last_activity<:expiration');
+
+        $statement->execute(array(
+
+            'expiration' => $expiration,
+
+        ));
+        // $this->table()->where('last_activity', '<', $expiration)->delete();
     }
 
     /**
@@ -102,8 +116,8 @@ class Database extends Driver {
      *
      * @return Query
      */
-    private function table() {
+    private function table()
+    {
         return $this->connection->table(config('session.table'));
     }
-
 }

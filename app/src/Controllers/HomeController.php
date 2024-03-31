@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function home()
     {
         // Cache::put("time","xxx",2);
-        echo Cache::get("time");
+        // echo Cache::get("time");
         // Session::put("xxx", 's');
         //        Config::setConfig('database.connections.mysql.','ddd');
         //        pd(Config::getAll());die;
@@ -30,6 +30,7 @@ class HomeController extends Controller
         //    pr(Session::getAll());
         //        pr(app()->services()->get('browser')->getOs());
         //        echo "xxxxxxx";
+        //        pr(app()->services()->get('browser')->getName());
         //        pr(app()->services()->get('browser')->getName());
         //        pr(config());   
         return response(view('home/index', []));

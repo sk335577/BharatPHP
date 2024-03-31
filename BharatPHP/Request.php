@@ -359,6 +359,19 @@ class Request
         }
     }
 
+    public function getPostSanitized($key = null)
+    {
+        if (null === $key) {
+            $post_data = $this->post;
+        } else {
+            $post_data = (isset($this->post[$key])) ? $this->post[$key] : null;
+        }
+        foreach ($post_data as $form_key => $form_value) {
+            $post_data[$form_key] = trim($form_value);
+        }
+        return $post_data;
+    }
+
     public function getFiles($key = null)
     {
         if (null === $key) {

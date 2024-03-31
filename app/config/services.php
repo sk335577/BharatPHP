@@ -3,6 +3,7 @@
 use BharatPHP\Config;
 use BharatPHP\App\Src\Services\Database;
 use BharatPHP\Browser;
+use BharatPHP\Hash\BcryptHasher;
 
 /* Services are global functionalities which can be accessed from any where of the application */
 
@@ -34,10 +35,17 @@ return [
         // ]
         'browser' => [
             'call' => Browser::class,
-        //    'params' => [
-        //        'config' => $app->config(),
-        //        'route_params' =>  $app->router()->getParams()
-        //    ]
-        ]
+            //    'params' => [
+            //        'config' => $app->config(),
+            //        'route_params' =>  $app->router()->getParams()
+            //    ]
+        ],
+        'hasher_bcrypt' => [
+            'call' => BcryptHasher::class,
+            //    'params' => [
+            //        'config' => $app->config(),
+            //        'route_params' =>  $app->router()->getParams()
+            //    ]
+        ],
     ]
 ];

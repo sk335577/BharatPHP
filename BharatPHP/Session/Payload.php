@@ -122,7 +122,7 @@ class Payload
     public function get($key, $default = null)
     {
         $session = $this->session['data'];
-        
+
 
         // We check for the item in the general session data first, and if it
         // does not exist in that data, we will attempt to find it in the new
@@ -281,7 +281,7 @@ class Payload
      */
     public function save()
     {
-        
+
 
         $this->session['last_activity'] = time();
 
@@ -313,6 +313,7 @@ class Payload
 
         if (mt_rand(1, $sweepage[1]) <= $sweepage[0]) {
             $this->sweep();
+        } else {
         }
     }
 
@@ -328,6 +329,7 @@ class Payload
     {
         if ($this->driver instanceof Sweeper) {
             $this->driver->sweep(time() - (Config::get('session.lifetime') * 60));
+        } else {
         }
     }
 
@@ -356,6 +358,6 @@ class Payload
 
         $minutes = (!$expire_on_close) ? $lifetime : 0;
 
-        Cookie::put($cookie, $this->session['id'], $minutes, $path, $domain, $secure);
+        Cookie::put($cookie, $this->session['id'], $minutes, $path, $domain, $secure, $httponly);
     }
 }
