@@ -21,7 +21,8 @@ class Cookie extends Driver {
 	{
 		if (C::has(Cookie::payload))
 		{
-			return unserialize(Crypter::decrypt(C::get(Cookie::payload)));
+			// return unserialize(Crypter::decrypt(C::get(Cookie::payload)));
+			return unserialize(decryptString(C::get(Cookie::payload)));
 		}
 	}
 
@@ -37,7 +38,8 @@ class Cookie extends Driver {
 	{
 		extract($config, EXTR_SKIP);
 
-		$payload = Crypter::encrypt(serialize($session));
+		// $payload = Crypter::encrypt(serialize($session));
+		$payload = encryptString(serialize($session));
 
 		C::put(Cookie::payload, $payload, $lifetime, $path, $domain, $secure);
 	}

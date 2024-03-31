@@ -102,6 +102,7 @@
 
 
                                             console.log(response['data']['2fa_img']);
+                                            $('.qrcode-scanner-steps-img').html('<img id="qr2fa" class="col-md-12" src="' + (response['data']['2fa_img']) + '"/>');
                                             var tmpImg = new Image();
                                             tmpImg.src = response['data']['2fa_img'];
                                             tmpImg.onload = function () {

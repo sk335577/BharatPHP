@@ -76,7 +76,7 @@
 
                     $.ajax({
                         type: "POST",
-                        url: form_step == 'FORGOT_PASSWORD' ? "<?php echo routeNameToURL('do_forgot_password') ?>" : "<?php echo routeNameToURL('do_reset_password') ?>",
+                        url: form_step == 'FORGOT_PASSWORD' ? "<?php echo routeNameToURL('do_send_reset_password') ?>" : "<?php echo routeNameToURL('do_reset_password') ?>",
                         dataType: "json",
                         // dataType: "json",
                         // processData: false,

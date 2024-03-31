@@ -7,6 +7,7 @@ use App\Controllers\Controller;
 use App\Models\Users;
 use App\Helpers\Utilities;
 use BharatPHP\Auth;
+use BharatPHP\Str;
 use BharatPHP\Config;
 use PragmaRX\Google2FA\Google2FA;
 use BharatPHP\Response;
@@ -44,7 +45,7 @@ class AuthController extends Controller
             'password',
             'gcaptcha_token',
             'auth_2fa_secret',
-            // 'google_auth_otp',
+            'remember',
             // 'auth_action_type',
             'auth_2fa_otp'
         ];
@@ -197,7 +198,17 @@ class AuthController extends Controller
 
                     if ($google2fa->verifyKey($post_data['auth_2fa_secret'], ($post_data['auth_2fa_otp']))) {
                         $update_google_auth_2fa_result = Users::updateUserByUserID($user['id'], ['auth_2fa' => $post_data['auth_2fa_secret']]);
-                        Session::put(Auth::user_key, ($user['id']));
+                        if (isset($post_data['remember']) && $post_data['remember'] == 1) {
+                            // Auth::remember($user['id']);
+                            // $this->rememberLogin();
+                            // $token = Crypter::encrypt($user['id'].'|'.Str::random(40));
+
+                            // $this->cookie($this->recaller(), $token, Cookie::forever);
+                            Auth::login($user['id'], true);
+                        } else {
+                            Auth::login($user['id'], false);
+                        }
+                        // Session::put(Auth::user_key, ($user['id']));
                         Users::updateUserByUserID($user['id'], ['last_login_timestamp' => date("Y-m-d H:i:s")]);
                     } else {
                         return json(['status' => 'error', 'message' => ['Invalid OTP'], 'data' => [
@@ -216,7 +227,17 @@ class AuthController extends Controller
 
                         // Code is valid
                         Users::updateUserByUserID($user['id'], ['last_login_timestamp' => date("Y-m-d H:i:s")]);
-                        Session::put(Auth::user_key, ($user['id']));
+                        // Session::put(Auth::user_key, ($user['id']));
+                        if (isset($post_data['remember']) && $post_data['remember'] == 1) {
+                            // Auth::remember($user['id']);
+                            // $this->rememberLogin();
+                            // $token = Crypter::encrypt($user['id'].'|'.Str::random(40));
+
+                            // $this->cookie($this->recaller(), $token, Cookie::forever);
+                            Auth::login($user['id'], true);
+                        } else {
+                            Auth::login($user['id'], false);
+                        }
                     } else {
                         return json(['status' => 'error', 'message' => ['Invalid OTP'], 'data' => [
                             'is_2fa_otp_valid' => 0,
@@ -268,7 +289,8 @@ class AuthController extends Controller
 
     public function login()
     {
-      
+        // Session::put('ss','11111111sx');
+        // print_r(Session::getAll());
         return response(view('auth/login/login', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }

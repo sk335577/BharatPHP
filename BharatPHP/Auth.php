@@ -102,7 +102,8 @@ class Auth
 		// user's ID and a long, random string. The ID and string are separated by
 		// a pipe character. Since we exploded the decrypted string, we can just
 		// pass the first item in the array to the user Closure.
-		$recaller = explode('|', Crypter::decrypt($recaller));
+		// $recaller = explode('|', Crypter::decrypt($recaller));
+		$recaller = explode('|', decryptString($recaller));
 
 		if (!is_null($user = call_user_func(Config::get('auth.user'), $recaller[0]))) {
 			static::login($user);
@@ -180,7 +181,8 @@ class Auth
 	 */
 	protected static function remember($id)
 	{
-		$recaller = Crypter::encrypt($id . '|' . Str::random(40));
+		// $recaller = Crypter::encrypt($id . '|' . Str::random(40));
+		$recaller = encryptString($id . '|' . Str::random(40));
 
 		// This method assumes the "remember me" cookie should have the same
 		// configuration as the session cookie. Since this cookie, like the
@@ -190,7 +192,7 @@ class Auth
 
 		extract($config, EXTR_SKIP);
 
-		Cookie::forever(Auth::remember_key, $recaller, $path, $domain, $secure);
+		Cookie::forever(Auth::remember_key, $recaller, $path, $domain, $secure, $httponly);
 	}
 
 	/**

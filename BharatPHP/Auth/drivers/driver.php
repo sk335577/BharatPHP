@@ -155,7 +155,8 @@ abstract class Driver {
 	 */
 	protected function remember($token)
 	{
-		$token = Crypter::encrypt($token.'|'.Str::random(40));
+		// $token = Crypter::encrypt($token.'|'.Str::random(40));
+		$token = encryptString($token.'|'.Str::random(40));
 
 		$this->cookie($this->recaller(), $token, Cookie::forever);
 	}
@@ -174,7 +175,8 @@ abstract class Driver {
 		// and return the first segment, which is the user's ID token.
 		if ( ! is_null($cookie))
 		{
-			return head(explode('|', Crypter::decrypt($cookie)));
+			// return head(explode('|', Crypter::decrypt($cookie)));
+			return head(explode('|', decryptString($cookie)));
 		}
 	}
 

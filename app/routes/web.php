@@ -6,8 +6,8 @@ use BharatPHP\Routes;
 
 
 Routes::get('/admin/login', [App\Controllers\Admin\Auth\AuthController::class, 'login'], ['name' => 'show_login_page', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
-Routes::get('/admin/forgot-password', [App\Controllers\Admin\Auth\ForgotPasswordController::class, 'showForgotPasswordPage'], ['name' => 'show_forgot_password_page', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
-Routes::post('/admin/do-forgot-password', [App\Controllers\Admin\Auth\ForgotPasswordController::class, 'doForgotPassword'], ['name' => 'do_forgot_password', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
+Routes::get('/admin/reset-password', [App\Controllers\Admin\Auth\ResetPasswordController::class, 'showResetPasswordPage'], ['name' => 'show_reset_password_page', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
+Routes::post('/admin/do-send-reset-password', [App\Controllers\Admin\Auth\ResetPasswordController::class, 'doSendResetPasswordEmail'], ['name' => 'do_send_reset_password', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
 Routes::post('/admin/do-reset-password', [App\Controllers\Admin\Auth\ResetPasswordController::class, 'doResetPassword'], ['name' => 'do_reset_password', 'middleware' => [App\Middleware\RedirectIfAuthenticated::class, \App\Middleware\DynamicConfig::class]]);
 Routes::post('/admin/do-login', [App\Controllers\Admin\Auth\AuthController::class, 'doLogin'], ['name' => 'do_login', 'middleware' => []]);
 // Routes::post('/admin/is-2fa-configured', [App\Controllers\Admin\Auth\AuthController::class, 'checkUserHasConfigured2Fa'], ['name' => 'check_user_has_configured_2Fa', 'middleware' => []]);

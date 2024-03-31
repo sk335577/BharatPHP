@@ -302,6 +302,6 @@ class ForgotPasswordController extends Controller
 
     public function showForgotPasswordPage()
     {
-        return response(view('auth/forgot-password/forgot-password', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
+        return response(view('auth/reset-password/reset-password', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }

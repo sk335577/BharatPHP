@@ -121,9 +121,9 @@ class Cookie
      * @param  bool    $secure
      * @return bool
      */
-    public static function forever($name, $value, $path = '/', $domain = null, $secure = false)
+    public static function forever($name, $value, $path = '/', $domain = null, $secure = false, $httponly = false)
     {
-        return static::put($name, $value, static::forever, $path, $domain, $secure);
+        return static::put($name, $value, static::forever, $path, $domain, $secure, $httponly);
     }
 
     /**
