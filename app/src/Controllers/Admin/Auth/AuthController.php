@@ -51,24 +51,24 @@ class AuthController extends Controller
 
         foreach ($post_data as $form_key => $form_value) {
             if (!in_array($form_key, $form_fields)) {
-                // $errors[] = 'Invalid form fields.';
-                $errors[] = 'Invalid login details';
+                $errors[] = 'Invalid form fields.';
+                // $errors[] = 'Invalid login details';
             }
         }
 
 
 
         if (!isset($post_data['email']) || empty($post_data['email'])) {
-            // $errors[] = 'Invalid email';
-            $errors[] = 'Invalid login details';
+            $errors[] = 'Invalid email';
+            // $errors[] = 'Invalid login details';
         } else {
             if (!filter_var($post_data['email'], FILTER_VALIDATE_EMAIL)) {
-                // $errors[] = 'Invalid email';
-                $errors[] = 'Invalid login details';
+                $errors[] = 'Invalid email';
+                // $errors[] = 'Invalid login details';
             } else {
                 if (preg_match("#^[a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,}$#", $post_data['email']) !== 1) {
-                    // $errors[] = 'Invalid email';
-                    $errors[] = 'Invalid login details';
+                    $errors[] = 'Invalid email';
+                    // $errors[] = 'Invalid login details';
                 } else {
                     //                    if (preg_match("#[._-]@#", $post_data['email']) == 1) {
                     //                        $errors[] = 'Invalid email';
@@ -82,45 +82,14 @@ class AuthController extends Controller
         }
 
         if (!isset($post_data['password']) || empty($post_data['password'])) {
-            // $errors[] = 'Invalid password';
-            $errors[] = 'Invalid login details';
+            $errors[] = 'Empty password';
+            // $errors[] = 'Invalid login details';
         }
 
 
 
-        if (isset($post_data['gcaptcha_token']) && !empty($post_data['gcaptcha_token'])) {
-
-            // Storing google recaptcha response
-            // in $recaptcha variable
-            $recaptcha = $post_data['gcaptcha_token'];
-
-            // Put secret key here, which we get
-            // from google console
-            $secret_key = Config::get('google_recapthca_v3.sitesecret');
-
-            // Hitting request to the URL, Google will
-            // respond with success or error scenario
-            $url = 'https://www.google.com/recaptcha/api/siteverify?secret='
-                . $secret_key . '&response=' . $recaptcha;
-
-
-            // Making request to verify captcha
-            $gresponse = file_get_contents($url);
-
-            // Response return by google is in
-            // JSON format, so we have to parse
-            // that json
-            $gresponse = json_decode($gresponse);
-
-
-            // Checking, if response is true or not
-            if (isset($gresponse->success) && $gresponse->success == true) {
-            } else {
-                // return json(['status' => 'error', 'message' => 'Invalid form']);
-                $errors[] = 'Invalid login details';
-            }
-        } else {
-            $errors[] = 'Invalid login details';
+        if (!validateGoogleCaptch('gcaptcha_token')) {
+            $errors[] = 'Invalid captcha';
         }
 
 
@@ -155,18 +124,34 @@ class AuthController extends Controller
 
 
 
-        $password = md5($post_data['password']);
+        // $password = md5($post_data['password']);
+
 
         if (config('auth.username') == 'email') {
-            $user = Users::getUserByEmailAndPassword($post_data['email'], $password);
+            // $user = Users::getUserByEmailAndPassword($post_data['email'], $password);
+            $user = Users::getUserByEmail($post_data['email']);
         } else {
-            $user = Users::getUserByUsernameAndPassword($post_data['email'], $password);
+            $user = Users::getUserByUsername($post_data['email']);
+        }
+
+        if (empty($user)) {
+            return json(['status' => 'error', 'message' => ['Invalid login details']]);
+        }
+
+        $is_password_correct = hashBcryptVerify($post_data['password'], $user['password']);
+
+        if (!$is_password_correct) {
+            return json(['status' => 'error', 'message' => ['Invalid login details']]);
         }
 
 
         $google2fa = new Google2FA();
 
         if (!empty($user)) {
+
+            if (($user['is_password_reset_required'] == 1)) {
+                return json(['status' => 'error', 'message' => ['Please reset your password from forgot password page']]);
+            }
 
 
             if (config('auth.use_password_expiration')) {
@@ -213,6 +198,7 @@ class AuthController extends Controller
                     if ($google2fa->verifyKey($post_data['auth_2fa_secret'], ($post_data['auth_2fa_otp']))) {
                         $update_google_auth_2fa_result = Users::updateUserByUserID($user['id'], ['auth_2fa' => $post_data['auth_2fa_secret']]);
                         Session::put(Auth::user_key, ($user['id']));
+                        Users::updateUserByUserID($user['id'], ['last_login_timestamp' => date("Y-m-d H:i:s")]);
                     } else {
                         return json(['status' => 'error', 'message' => ['Invalid OTP'], 'data' => [
                             'is_google_2fa_otp_valid' => 0,
@@ -229,6 +215,7 @@ class AuthController extends Controller
                     if ($google2fa->verifyKey($user['auth_2fa'], ($post_data['auth_2fa_otp']))) {
 
                         // Code is valid
+                        Users::updateUserByUserID($user['id'], ['last_login_timestamp' => date("Y-m-d H:i:s")]);
                         Session::put(Auth::user_key, ($user['id']));
                     } else {
                         return json(['status' => 'error', 'message' => ['Invalid OTP'], 'data' => [
@@ -281,13 +268,7 @@ class AuthController extends Controller
 
     public function login()
     {
-        // echo hashBcrypt('sandeep');
-        // $cr=new CrypterV2('7777777777777777');
-        // echo $c = $cr->encrypt("abc");
-        //  $c = $cr->decrypt($c);
-        // Session::put('xx', 'fff');
-        // print_r(Session::getAll());
-        // print_r(config('session'));
+      
         return response(view('auth/login/login', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }

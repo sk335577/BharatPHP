@@ -46,7 +46,7 @@
                     var current_this = this;
 
 
-                    $("form#login-form").find("input[type='submit']").text("Submitting").attr("disabled", "disabled");
+                    $("form#login-form").find("input[type='submit'],button[type='submit']").text("Submitting").attr("disabled", "disabled");
                     $("form#login-form").find("#messages .alert").remove();
 
 
@@ -179,7 +179,7 @@
 
 
                             // grecaptcha.reset();
-                            $("form#login-form").find("input[type='submit']").text("Submit").removeAttr("disabled");
+                            $("form#login-form").find("input[type='submit'],button[type='submit']").text("Submit").removeAttr("disabled");
                         },
                     });
 

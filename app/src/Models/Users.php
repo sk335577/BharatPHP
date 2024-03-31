@@ -22,7 +22,7 @@ class Users extends Model
 
     public static function getUserByUserID($user_id)
     {
-        return parent::getOne('select * from ' . self::$table . ' WHERE id=:id ', ['id' => 1]);
+        return parent::getOne('select * from ' . self::$table . ' WHERE id=:id ', ['id' => $user_id]);
     }
 
     public static function createUser($user_data)
@@ -55,8 +55,30 @@ class Users extends Model
         return parent::getOne('select * from ' . self::$table . ' WHERE username=:username AND password=:password', ['username' => $user_name, 'password' => $password]);
     }
 
+
+
     public static function getUserByEmailAndPassword($user_name, $password)
     {
         return parent::getOne('select * from ' . self::$table . ' WHERE email=:email AND password=:password', ['email' => $user_name, 'password' => $password]);
+    }
+    public static function isSecretCodeValid($secret)
+    {
+
+        $result = parent::getOne('select  id,email,reset_password_secret_generated_time from ' . self::$table . ' WHERE BINARY reset_password_secret=:reset_password_secret ', ['reset_password_secret' => $secret]);
+
+        if (empty($result)) {
+            return ['status' => 'error', 'message' => 'Security code is not valid'];
+        }
+
+        if (isset($result['reset_password_secret_generated_time']) && !empty($result['reset_password_secret_generated_time'])) {
+            $reset_password_secret_generated_time = strtotime($result['reset_password_secret_generated_time']);
+            // if ((time() - $result['reset_password_secret_generated_time']) > 3600) {
+            if ((time() - $reset_password_secret_generated_time) > 3600) {
+                return ['status' => 'error', 'message' => 'Security code is not valid/expired'];
+            }
+        }
+        
+
+        return ['status' => 'success', 'data' => $result];
     }
 }

@@ -7,8 +7,32 @@
 <script>
     (function ($) {
 
+        var form_step = 'FORGOT_PASSWORD';
 
-        var current_page_visible_area = "LOGIN";
+
+        $.validator.addMethod("strong_password", function (value, element) {
+            let password = value;
+            if (!(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%&])(.{8,20}$)/.test(password))) {
+                return false;
+            }
+            return true;
+        }, function (value, element) {
+            let password = $(element).val();
+            if (!(/^(.{6,20}$)/.test(password))) {
+                return 'Password must be between 6 to 20 characters long.';
+            } else if (!(/^(?=.*[A-Z])/.test(password))) {
+                return 'Password must contain at least one uppercase.';
+            } else if (!(/^(?=.*[a-z])/.test(password))) {
+                return 'Password must contain at least one lowercase.';
+            } else if (!(/^(?=.*[0-9])/.test(password))) {
+                return 'Password must contain at least one digit.';
+            } else if (!(/^(?=.*[@#$%&])/.test(password))) {
+                return "Password must contain special characters from @#$%&.";
+            }
+            return false;
+        });
+
+
 
 
         $("form#login-form").submit(function (e) {
@@ -46,13 +70,13 @@
                     var current_this = this;
 
 
-                    $("form#login-form").find("input[type='submit']").text("Submitting").attr("disabled", "disabled");
+                    $("form#login-form").find("input[type='submit'],button[type='submit']").text("Submitting").attr("disabled", "disabled");
                     $("form#login-form").find("#messages .alert").remove();
 
 
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo routeNameToURL('do_forgot_password') ?>",
+                        url: form_step == 'FORGOT_PASSWORD' ? "<?php echo routeNameToURL('do_forgot_password') ?>" : "<?php echo routeNameToURL('do_reset_password') ?>",
                         dataType: "json",
                         // dataType: "json",
                         // processData: false,
@@ -65,6 +89,34 @@
 
                                     if (response.status == "success") {
 
+                                        if (form_step == 'FORGOT_PASSWORD') {
+                                            form_step = 'RESET_PASSWORD';
+                                            $('#forgot-password-container').hide();
+                                            $('#reset-password-container').show();
+                                            $('#secret,#password,#passwordconfirm').removeAttr('disabled');
+                                            $('#email').attr('disabled');
+                                            $('#email').rules('remove');
+                                            $('#secret').rules('add', {
+                                                required: true,
+                                                minlength: 6,
+                                                maxlength: 6,
+                                                // digits: true
+                                            });
+                                            $('#password').rules('add', {
+                                                required: true,
+                                                strong_password: 6,
+
+                                            });
+                                            $('#passwordconfirm').rules('add', {
+                                                required: true,
+                                                equalTo: "#password"
+
+                                            });
+
+
+                                        } else {
+
+                                        }
 
 
                                         // $("form#login-form")[0].reset();
@@ -127,7 +179,7 @@
 
 
                             // grecaptcha.reset();
-                            $("form#login-form").find("input[type='submit']").text("Submit").removeAttr("disabled");
+                            $("form#login-form").find("input[type='submit'],button[type='submit']").text("Submit").removeAttr("disabled");
                         },
                     });
 

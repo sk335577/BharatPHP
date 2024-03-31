@@ -14,85 +14,8 @@ use BharatPHP\Response;
 use BharatPHP\Session;
 use BharatPHP\Cookie;
 
-class ForgotPasswordController extends Controller
+class ResetPasswordController extends Controller
 {
-    public function doForgotPassword()
-    {
-
-        $post_data = (request()->getPost());
-
-
-        $errors = [];
-
-
-        $form_fields = [
-            'email',
-            'gcaptcha_token',
-        ];
-
-        foreach ($post_data as $form_key => $form_value) {
-            if (!in_array($form_key, $form_fields)) {
-                // $errors[] = 'Invalid form fields.';
-                $errors[] = 'Invalid login details';
-            }
-        }
-
-        if (!empty($errors)) {
-            return json([
-                'status' => 'error',
-                'message' => $errors
-            ]);
-        }
-
-        if (!validateGoogleCaptch('gcaptcha_token')) {
-            $errors[] = 'Invalid login details';
-        }
-
-        if (!validateEmail('email')) {
-            $errors[] = 'Invalid login details';
-        }
-
-
-
-        if (!empty($errors)) {
-            return json([
-                'status' => 'error',
-                'message' => $errors
-            ]);
-        }
-
-        $user = Users::getUserByEmail($post_data['email']);
-
-
-        if (empty($user)) {
-            return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
-        }
-
-
-
-        while (1) {
-            $secret = randomTextGenerator(6);
-            $is_secret_exists = Users::getUserByResetPasswordSecret($secret);
-            if (empty($is_secret_exists)) {
-                break;
-            }
-        }
-
-
-
-        Users::updateUserByUserID($user['id'], ['reset_password_secret' => $secret]);
-        Users::updateUserByUserID($user['id'], ['reset_password_secret_generated_time' => date('Y-m-d H:i:s')]);
-
-        $email_vars = array(
-            // 'secret' => $secret,
-            'otp' => $secret,
-            'base_url' => appUrl(),
-        );
-        $body = getViewFileContentsWithPlaceholders('backend/auth/forgot-password/email-templates/otp.phtml', $email_vars);
-
-        Email::sendEmail($post_data['email'], 'Secret Code - Reset Password - ' . Config::get('app_title'), $body);
-        return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
-    }
 
     public function doResetPassword()
     {
@@ -298,10 +221,5 @@ class ForgotPasswordController extends Controller
         ]);
 
         return json(['status' => 'success', 'message' => 'Your password has been updated successfully']);
-    }
-
-    public function showForgotPasswordPage()
-    {
-        return response(view('auth/forgot-password/forgot-password', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 }
