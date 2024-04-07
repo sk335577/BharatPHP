@@ -22,12 +22,13 @@ return
 	*/
 
 			'username' => 'email',
+			'admin_panel_path' => envConfig('ADMIN_PANEL_PATH', 'admin'),
 
 			'use_password_expiration' => true, //90 days
 			'use_user_lock_after_failed_password_attemps' => true, //90 days
 			// 'password_expiration_days' => '7776000', //90 days
 			'password_expiration_days' => 86400 * envConfig('USER_PASSWORD_EXPIRE_TIME_IN_DAYS', 90), //90 days
-			'failed_password_locked_minutes' => 5 * 60, 
+			'failed_password_locked_minutes' => 5 * 60,
 			'lock_account_after_failed_password_attemps' => 5, //90 days
 
 

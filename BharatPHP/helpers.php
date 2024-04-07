@@ -109,6 +109,11 @@ function printAppUrl()
     echo app()->request()->appUrl();
 }
 
+function printAssetsUrl()
+{
+    return config('asset_url', app()->request()->appUrl());
+}
+
 function getTemplatePart($part, $viewtype = 'frontend')
 {
     return app()->view()->getTemplatePart($part);

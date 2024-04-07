@@ -2,7 +2,9 @@
 
 namespace BharatPHP;
 
+use App\Models\Users;
 use BharatPHP\Session;
+use BharatPHP\Hash;
 
 class Auth
 {
@@ -10,7 +12,7 @@ class Auth
 	/**
 	 * The current user of the application.
 	 *
-	 * @var object
+	 * @var array
 	 */
 	protected static $user;
 
@@ -67,7 +69,7 @@ class Auth
 	 *		$email = Auth::user()->email;
 	 * </code>
 	 *
-	 * @return object
+	 * @return array
 	 */
 	public static function user()
 	{
@@ -75,7 +77,11 @@ class Auth
 
 		$id = Session::get(Auth::user_key);
 
-		static::$user = call_user_func(Config::get('auth.user'), $id);
+
+		// static::$user = call_user_func(Config::get('auth.user'), $id);
+		if (!is_null($id) and filter_var($id, FILTER_VALIDATE_INT) !== false) {
+			return Users::getUserByUserID($id);
+		}
 
 		// If the user was not found in the database, but a "remember me" cookie
 		// exists, we will attempt to recall the user based on the cookie value.
@@ -131,13 +137,33 @@ class Auth
 	{
 		$config = Config::get('auth');
 
-		$user = call_user_func($config['attempt'], $username, $password, $config);
-
-		if (!is_null($user)) {
-			static::login($user, $remember);
-
-			return true;
+		if (config('auth.username') == 'email') {
+			// $user = Users::getUserByEmailAndPassword($post_data['email'], $password);
+			$user = Users::getUserByEmail($username);
+		} else {
+			$user = Users::getUserByUsername($username);
 		}
+		// $user = User::where($config['username'], '=', $username)->first();
+
+		if (isset($user['password'])) {
+			$is_password_correct = hashBcryptVerify($password, $user['password']);
+
+			if ($is_password_correct) {
+				// if (!is_null($user) and Hash::check($password, $user->password)) {
+				// 	return $user;
+				// }
+				// $user = call_user_func($config['attempt'], $username, $password, $config);
+
+				if (!is_null($user)) {
+					static::login($user['id'], $remember);
+
+					return true;
+				}
+			}
+		}
+
+
+
 
 		return false;
 	}

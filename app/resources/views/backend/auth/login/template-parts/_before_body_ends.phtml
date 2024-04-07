@@ -1,17 +1,16 @@
 <script src="<?php printAppUrl(); ?>/backend/assets/plugins/jquery-validation/jquery.validate.min.js"></script>
 <script src="<?php printAppUrl(); ?>/backend/assets/plugins/jquery-validation/additional-methods.min.js"></script>
 <script src="<?php printAppUrl(); ?>/backend/assets/js/validations.js"></script>
-<script
-    src="https://www.google.com/recaptcha/api.js?render=<?php echo config('google_recapthca_v3.sitekey'); ?>"></script>
+<script src="https://www.google.com/recaptcha/api.js?render=<?php echo config('google_recapthca_v3.sitekey'); ?>"></script>
 
 <script>
-    (function ($) {
+    (function($) {
 
 
         var current_page_visible_area = "LOGIN";
 
 
-        $("form#login-form").submit(function (e) {
+        $("form#login-form").submit(function(e) {
 
             e.preventDefault();
 
@@ -22,11 +21,11 @@
             }
 
 
-            grecaptcha.ready(function () {
+            grecaptcha.ready(function() {
 
                 grecaptcha.execute($('form#login-form').data('gck'), {
                     action: 'submit'
-                }).then(function (token) {
+                }).then(function(token) {
 
 
                     // var formData = new FormData(this);
@@ -58,21 +57,21 @@
                         // processData: false,
                         // contentType: false,
                         data: formData,
-                        success: function (response) {
+                        success: function(response) {
                             try {
 
                                 if (response.status) {
 
                                     if (response.status == "success") {
 
-
+                                        window.location.href = "<?php echo routeNameToURL('show_dashboard_page'); ?>";
 
                                         // $("form#login-form")[0].reset();
                                     } else {
 
                                         if (typeof response["message"] != "undefined") {
                                             if ($.isArray(response.message)) {
-                                                $.each(response.message, function (index, message) {
+                                                $.each(response.message, function(index, message) {
                                                     $("form#login-form").find("#messages").append(
                                                         '<div data-alert class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>' +
                                                         message +
@@ -94,7 +93,9 @@
 
                                                 .stop()
 
-                                                .animate({ scrollTop: $(".login-box").offset().top }, 500, "swing", function () { });
+                                                .animate({
+                                                    scrollTop: $(".login-box").offset().top
+                                                }, 500, "swing", function() {});
                                         }
 
 
@@ -105,7 +106,7 @@
                                             $('.qrcode-scanner-steps-img').html('<img id="qr2fa" class="col-md-12" src="' + (response['data']['2fa_img']) + '"/>');
                                             var tmpImg = new Image();
                                             tmpImg.src = response['data']['2fa_img'];
-                                            tmpImg.onload = function () {
+                                            tmpImg.onload = function() {
                                                 console.log(response['data']['2fa_img']);
                                                 $('.qrcode-scanner-steps-img').html('<img id="qr2fa" class="col-md-12" src="' + (response['data']['2fa_img']) + '"/>');
                                                 $('body').Layout('fixLoginRegisterHeight');
@@ -146,7 +147,7 @@
 
 
                                             } else {
-                                                // window.location.href = "<?php echo routeNameToURL('home'); ?>";
+                                                
                                             }
 
                                         }
@@ -163,12 +164,12 @@
                             }
 
                         },
-                        error: function (response) {
+                        error: function(response) {
 
                             $("form#login-form").find("#messages").append('<div class="alert alert-warning alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>Something went wrong</div>');
                         },
 
-                        complete: function () {
+                        complete: function() {
                             $('body').Layout('fixLoginRegisterHeight');
 
                             // setTimeout(function () {

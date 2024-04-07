@@ -37,7 +37,7 @@ return array_replace_recursive(
               | is not set, we'll default to the application URL above.
               |
              */
-    'asset_url' => envConfig('ASSET_URL'),
+    'asset_url' => envConfig('ASSET_URL', ''),
     /*
               |--------------------------------------------------------------------------
               | Profiler Toolbar

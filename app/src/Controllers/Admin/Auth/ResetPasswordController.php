@@ -90,7 +90,7 @@ class ResetPasswordController extends Controller
             'otp' => $secret,
             'base_url' => appUrl(),
         );
-        $body = getViewFileContentsWithPlaceholders('backend/auth/forgot-password/email-templates/otp.phtml', $email_vars);
+        $body = getViewFileContentsWithPlaceholders('backend/auth/reset-password/email-templates/otp.phtml', $email_vars);
 
         Email::sendEmail($post_data['email'], 'Secret Code - Reset Password - ' . Config::get('app_title'), $body);
         return json(['status' => 'success', 'message' => 'If the account exists you should receive a email containing a secret code soon']);
@@ -98,6 +98,7 @@ class ResetPasswordController extends Controller
 
     public function showResetPasswordPage()
     {
+        // print_r(Session::getAll());
         return response(view('auth/reset-password/reset-password', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));
     }
 
@@ -247,11 +248,12 @@ class ResetPasswordController extends Controller
             // $user_info['password_history'] = json_encode([$post_data['password']]);
         } else {
             $password_history = json_decode($user_info['password_history'], 1);
-            // pd($password_history[0]);
+            // pd($password_history);
             $is_password_in_used_list = false;
             foreach ($password_history as $lk => $password_history_hash) {
 
                 if (hashBcryptVerify($post_data['password'], $password_history_hash)) {
+                    
                     $is_password_in_used_list = true;
                     break;
                 }

@@ -19,10 +19,10 @@ use BharatPHP\CrypterV2;
 class AuthController extends Controller
 {
 
-    public function logout()
+    public function doLogout()
     {
         Session::forget(Auth::user_key);
-        Response::redirectAndExitAndSaveSession(routeNameToURL('login'));
+        Response::redirectAndExitAndSaveSession(routeNameToURL('show_login_page'));
     }
 
 
@@ -289,6 +289,9 @@ class AuthController extends Controller
 
     public function login()
     {
+        // Session::put('name','sandeep');
+        // return app()->response()->redirect(routeNameToURL('show_reset_password_page'));
+        // return Response::redirect(routeNameToURL('show_reset_password_page'));
         // Session::put('ss','11111111sx');
         // print_r(Session::getAll());
         return response(view('auth/login/login', [], $layout = 'auth/layouts/auth', $viewtype = 'backend'));

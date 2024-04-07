@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use BharatPHP\Auth;
 use BharatPHP\Request;
 use BharatPHP\Response;
 use BharatPHP\Config;
@@ -13,10 +14,8 @@ class RedirectIfAuthenticated
     public function execute(Request $request, Response $response)
     {
 
-        $logged_in_userID = Session::get('loggedInUserID');
-
-        if (!is_null($logged_in_userID)) {
-            Response::redirectAndExit(routeNameToURL('das'));
+        if (!Auth::guest()) {
+            Response::redirectAndExit(routeNameToURL('show_dashboard_page'));
         }
     }
 }

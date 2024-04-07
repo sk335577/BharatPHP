@@ -142,7 +142,7 @@ class Response
      * @throws Exception
      * @return void
      */
-    public static function redirect($url, $code = '302', $version = '1.1')
+    public  function redirect($url, $code = '302', $version = '1.1')
     {
         if (headers_sent()) {
             throw new Exception('The headers have already been sent.');
@@ -152,8 +152,10 @@ class Response
             throw new Exception('The header code ' . $code . ' is not allowed.');
         }
 
-        header("HTTP/{$version} {$code} " . self::$responseCodes[$code]);
-        header("Location: {$url}");
+        $this->setCode($code);
+        $this->setHeader("Location",$url);
+        // header("HTTP/{$version} {$code} " . self::$responseCodes[$code]);
+        // header("Location: {$url}");
     }
 
     /**
