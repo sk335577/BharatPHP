@@ -16,13 +16,25 @@ use BharatPHP\Cookie;
 use BharatPHP\Crypter;
 use BharatPHP\CrypterV2;
 
+
+
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
+use BaconQrCode\Renderer\GDLibRenderer;
+
+
 class AuthController extends Controller
 {
 
     public function doLogout()
     {
-        Session::forget(Auth::user_key);
-        Response::redirectAndExitAndSaveSession(routeNameToURL('show_login_page'));
+        Auth::logout();
+        // Session::forget(Auth::user_key);
+        // Response::redirectAndExitAndSaveSession(routeNameToURL('show_login_page'));
+
+        return app()->response()->redirect(routeNameToURL('show_login_page'));
     }
 
 
@@ -185,14 +197,35 @@ class AuthController extends Controller
                         $secret
                     );
 
-                    $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=' . $text;
+
+
+
+
+
+                    // $renderer = new ImageRenderer(
+                    //     new RendererStyle(400),
+                    //     new ImagickImageBackEnd()
+                    // );
+                    // $writer = new Writer($renderer);
+                    // $writer->writeFile('Hello World!', 'qrcode.png');
+                    // $writer->writeFile('Hello World!', 'qrcode.png');
+
+
+                    // $image_url = 'https://chart.googleapis.com/chart?cht=qr&chs=250x250&chl=' . $text;
+                    $renderer = new GDLibRenderer(250);
+                    $writer = new Writer($renderer);
+                    // $qrcode_img_string = $writer->writeString($text, 'qrcode.png');
+                    $qrcode_img_string = $writer->writeString($text);
+                    $base64 = 'data:image/' . 'png' . ';base64,' . base64_encode($qrcode_img_string);
+                    // die($qrcode_img_string);
 
                     //TODO: save secret in session
                     return json(['status' => 'error', 'message' => ['Please setup 2FA Authentication'], 'data' => [
                         'is_2fa_configured' => 0,
                         'auth_2fa_secret' => $secret,
                         // 'google2fa_img' => $g2faUrl,
-                        '2fa_img' => $image_url,
+                        // '2fa_img' => $image_url,
+                        '2fa_img' => $base64,
                     ]]);
                 } else {
 

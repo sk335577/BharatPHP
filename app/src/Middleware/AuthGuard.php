@@ -15,7 +15,7 @@ class AuthGuard
     {
 
         if (Auth::guest()) {
-            Response::redirectAndExit(routeNameToURL('show_login_page'));
+            return app()->response()->redirect(routeNameToURL('show_login_page'));
         }
     }
 }

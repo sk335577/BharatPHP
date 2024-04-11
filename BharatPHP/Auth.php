@@ -232,7 +232,7 @@ class Auth
 	 */
 	public static function logout()
 	{
-		call_user_func(Config::get('auth.logout'), static::user());
+		// call_user_func(Config::get('auth.logout'), static::user());
 
 		static::$user = null;
 

@@ -15,7 +15,8 @@ class RedirectIfAuthenticated
     {
 
         if (!Auth::guest()) {
-            Response::redirectAndExit(routeNameToURL('show_dashboard_page'));
+            return app()->response()->redirect(routeNameToURL('show_dashboard_page'));
+            // Response::redirectAndExit(routeNameToURL('show_dashboard_page'));
         }
     }
 }

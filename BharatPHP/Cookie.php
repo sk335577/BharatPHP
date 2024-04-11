@@ -90,7 +90,10 @@ class Cookie
             $expiration = time() + ($expiration * 60);
         }
 
-        $value = static::hash($value) . '+' . $value;
+        if (!empty($value)) {
+            $value = static::hash($value) . '+' . $value;
+        }
+
 
         // If the developer has explicitly disabled SLL, then we shouldn't force
         // this cookie over SSL.

@@ -21,7 +21,8 @@
   "require": {
     "pragmarx/google2fa": "^8.0",
     "aws/aws-sdk-php-resources": "^0.3.0",
-    "phpmailer/phpmailer": "^6.6"
+    "phpmailer/phpmailer": "^6.6",
+    "bacon/bacon-qr-code": "dev-main"
   },
   "autoload": {
     "files": [
