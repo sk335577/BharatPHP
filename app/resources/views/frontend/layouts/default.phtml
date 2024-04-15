@@ -2,46 +2,53 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-    <?php printInjectedTemplates("head_title_meta_tags"); ?>
-    <!-- <title><?php echo config('app_title'); ?></title> -->
+    <?php if (printInjectedTemplates("head_title_meta_tags")) { ?>
 
-    <!-- Bootstrap core CSS -->
-    <link href="<?php printAppUrl(); ?>/frontend/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom fonts for this template -->
-    <link href="<?php printAppUrl(); ?>/frontend/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-
-    <!-- Custom styles for this template -->
-    <link href="<?php printAppUrl(); ?>/frontend/assets/css/freelancer.min.css" rel="stylesheet">
-
-    
-    <?php printInjectedTemplates("before_head_ends"); ?>
-</head>
-
-<body class="index" id="page-top">
-
-    <!-- Navigation -->
     <?php
-    printTemplatePart("template-parts/navigation");
+    } else {  ?>
+        <title>
+            <?php if (isset($page_title)) {
+                echo $page_title . " - " . config('app_title');
+            } else {
+                echo config('app_title');
+            }  ?>
+        </title>
+    <?php } ?>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="<?php echo printAssetsUrl() ?>/frontend/assets/css/styles.css" rel="stylesheet" />
+
+    <?php
+    printInjectedTemplates("before_head_ends");
     ?>
 
+</head>
+
+<body>
+    <!-- Header-->
+    <?php printTemplatePart("template-parts/header"); ?>
     <!--Main Content Starts-->
     {{content}}
     <!--Main Content Ends-->
 
-    <!-- Footer -->
+    <!-- Footer-->
+    <?php printTemplatePart("template-parts/footer"); ?>
+
+
     <?php
-    printTemplatePart("template-parts/footer");
+    printInjectedTemplates("before_body_ends");
     ?>
 
-    <?php printInjectedTemplates("before_body_ends"); ?>
 </body>
 
 </html>

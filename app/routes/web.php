@@ -22,8 +22,9 @@ Routes::get("/{$admin_panel_name}/do-logout", [App\Controllers\Admin\Auth\AuthCo
 // Routes::post('/'.{$admin_panel_name}.'/is-2fa-configured', [App\Controllers\Admin\Auth\AuthController::class, 'checkUserHasConfigured2Fa'], ['name' => 'check_user_has_configured_2Fa', 'middleware' => []]);
 //Routes::get('/', [App\Controllers\HomeController::class, 'home'])->middleware();
 Routes::get('/', [App\Controllers\HomeController::class, 'home'], ['name' => 'home', 'middleware' => []]);
+Routes::get('/{lang}', [App\Controllers\HomeController::class, 'home'], ['name' => 'home_translated', 'middleware' => []]);
 // Routes::get('/', [App\Controllers\HomeController::class, 'home'], ['name' => 'home', 'middleware' => [\App\Middleware\LoadDataSources::class]]);
-Routes::get('/{lang}', [App\Controllers\HomeController::class, 'home'], ['middleware' => []]);
+// Routes::get('/{lang}', [App\Controllers\HomeController::class, 'home'], ['middleware' => []]);
 // Router::get('/register', [Home::class, 'register']);
 // Router::post('/register', [Home::class, 'register']);
 // Router::get('/login', [Home::class, 'login']);

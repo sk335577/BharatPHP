@@ -5,26 +5,26 @@ return array_replace_recursive(
     'app_title' => envConfig('APP_TITLE', 'BharatPHP'),
     'paths' => [],
     /*
-              |--------------------------------------------------------------------------
-              | Application Key
-              |--------------------------------------------------------------------------
-              |
-              | This key is used by the encryption and cookie classes to generate secure
-              | encrypted strings and hashes. It is extremely important that this key
-              | remains secret and it should not be shared with anyone. Make it about 32
-              | characters of random gibberish.
-              |
+      |--------------------------------------------------------------------------
+      | Application Key
+      |--------------------------------------------------------------------------
+      |
+      | This key is used by the encryption and cookie classes to generate secure
+      | encrypted strings and hashes. It is extremely important that this key
+      | remains secret and it should not be shared with anyone. Make it about 32
+      | characters of random gibberish.
+      |
              */
     'application_key' => envConfig('APP_KEY', 'BharatPHP'),
     /*
-              |--------------------------------------------------------------------------
-              | Application URL
-              |--------------------------------------------------------------------------
-              |
-              | The URL used to access your application without a trailing slash. The URL
-              | does not have to be set. If it isn't, we'll try our best to guess the URL
-              | of your application.
-              |
+      |--------------------------------------------------------------------------
+      | Application URL
+      |--------------------------------------------------------------------------
+      |
+      | The URL used to access your application without a trailing slash. The URL
+      | does not have to be set. If it isn't, we'll try our best to guess the URL
+      | of your application.
+      |
              */
     'url' => envConfig('APP_URL'),
     /*

@@ -1,6 +1,7 @@
 <?php
 
 return [
-    'string' => 'Sandeep in English'
+    'string' => 'Sandeep in English',
+    'home' => 'Home',
 ];
 

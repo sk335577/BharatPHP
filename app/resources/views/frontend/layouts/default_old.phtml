@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <?php printInjectedTemplates("head_title_meta_tags"); ?>
+    <!-- <title><?php echo config('app_title'); ?></title> -->
+
+    <!-- Bootstrap core CSS -->
+    <link href="<?php printAppUrl(); ?>/frontend/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="<?php printAppUrl(); ?>/frontend/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="<?php printAppUrl(); ?>/frontend/assets/css/freelancer.min.css" rel="stylesheet">
+
+    
+    <?php printInjectedTemplates("before_head_ends"); ?>
+</head>
+
+<body class="index" id="page-top">
+
+    <!-- Navigation -->
+    <?php
+    printTemplatePart("template-parts/navigation");
+    ?>
+
+    <!--Main Content Starts-->
+    {{content}}
+    <!--Main Content Ends-->
+
+    <!-- Footer -->
+    <?php
+    printTemplatePart("template-parts/footer");
+    ?>
+
+    <?php printInjectedTemplates("before_body_ends"); ?>
+</body>
+
+</html>

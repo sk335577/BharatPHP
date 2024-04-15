@@ -77,7 +77,7 @@ class Users extends Model
                 return ['status' => 'error', 'message' => 'Security code is not valid/expired'];
             }
         }
-        
+
 
         return ['status' => 'success', 'data' => $result];
     }

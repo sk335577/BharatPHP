@@ -1,13 +1,13 @@
 <?php
 
 return [
-    /*
+  /*
       |--------------------------------------------------------------------------
       | Application Language Config
       |--------------------------------------------------------------------------
      */
-    'languages' => [
-        /*
+  'languages' => [
+    /*
           |--------------------------------------------------------------------------
           | Default Application Language
           |--------------------------------------------------------------------------
@@ -16,8 +16,8 @@ return [
           | Lang library as the default language when doing string localization.
           |
          */
-        'language' => 'en', //Default Language
-        /*
+    'language' => 'en', //Default Language
+    /*
           |--------------------------------------------------------------------------
           | Supported Languages
           |--------------------------------------------------------------------------
@@ -27,7 +27,10 @@ return [
           | the default language will automatically be set to that language.
           |
          */
-        'languages_allowed' => ['en', "fr"],
-        'path' => BharatPHP_APP_PATH . '/lang'//Directory which contains the languages files
+    'languages_allowed' => [
+      'en' => 'English',
+      "hi" => 'Hindi'
     ],
+    'path' => BharatPHP_APP_PATH . '/lang' //Directory which contains the languages files
+  ],
 ];
