@@ -14,11 +14,28 @@ class Translator
 
         $current_lang = (app()->request()->getRouteParam('lang'));;
 
+        $languages = Config::get('languages');
+
         if (!is_null($current_lang)) {
+            $application_lang = $current_lang;
+        } else {
+            $url = app()->request()->getUrl();
+            foreach ($languages['languages_allowed'] as $lnk => $lng) {
+                if (preg_match("#^[/]$lnk$#", $url) == 1) {
+                    $current_lang = $lnk;
+                    break;
+                } elseif (preg_match("#^[\/]($lnk)[/]$#", $url) == 1) {
+                    $current_lang = $lnk;
+                    break;
+                } elseif (preg_match("#^[/]($lnk)[/].+$#", $url) == 1) {
+                    $current_lang = $lnk;
+                    break;
+                }
+            }
             $application_lang = $current_lang;
         }
 
-        $languages = Config::get('languages');
+
 
 
         if (!isset($languages['loaded'][$application_lang])) {
@@ -27,7 +44,7 @@ class Translator
                 $application_lang = Config::get('languages.language');
             }
 
-            
+
 
             Config::set([
                 'languages' => [
@@ -47,7 +64,7 @@ class Translator
 
         $application_lang = config('languages.language');
         // $application_lang = Config::get('languages');;
-        
+
 
         //        $current_lang = (app()->request()->getRouteParam('lang'));
         //        if (!is_null($current_lang)) {

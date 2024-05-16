@@ -354,6 +354,8 @@ class Payload
     protected function cookie($config)
     {
 
+        // pd($config);
+
         extract($config, EXTR_SKIP);
 
         $minutes = (!$expire_on_close) ? $lifetime : 0;

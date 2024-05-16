@@ -322,6 +322,7 @@ class AuthController extends Controller
 
     public function login()
     {
+        
         // Session::put('name','sandeep');
         // return app()->response()->redirect(routeNameToURL('show_reset_password_page'));
         // return Response::redirect(routeNameToURL('show_reset_password_page'));

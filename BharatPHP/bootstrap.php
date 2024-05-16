@@ -3,6 +3,11 @@
 use BharatPHP\Error;
 use BharatPHP\Config;
 
+error_reporting(-1);
+
+ini_set('display_errors', 'Off');
+
+
 require_once BharatPHP_ROOT_PATH . '/BharatPHP/autoloader.php';
 
 Config::loadEnvConfig(BharatPHP_APP_CONFIG_PATH . "/env/" . getenv('APP_ENV') . ".env"); //Save config in config class     

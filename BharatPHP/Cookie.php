@@ -95,6 +95,7 @@ class Cookie
         }
 
 
+
         // If the developer has explicitly disabled SLL, then we shouldn't force
         // this cookie over SSL.
         $secure = $secure && Config::get('application.ssl');

@@ -111,7 +111,7 @@ function printAppUrl()
 
 function printAssetsUrl()
 {
-    return config('asset_url', app()->request()->appUrl());
+    echo config('asset_url', app()->request()->appUrl());
 }
 
 function getTemplatePart($part, $viewtype = 'frontend')
@@ -451,15 +451,7 @@ function array_except($array, $keys)
     return array_diff_key($array, array_flip((array) $keys));
 }
 
-/**
- * Determine if "Magic Quotes" are enabled on the server.
- *
- * @return bool
- */
-function magic_quotes()
-{
-    return function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc();
-}
+
 
 /**
  * Return the first element of an array.
@@ -923,4 +915,83 @@ function getViewFileContentsWithPlaceholders($view, $email_vars)
         }
     }
     return $body;
+}
+
+
+
+function cryptoJsAesDecrypt($jsonString, $passphrase)
+{
+    $jsondata = json_decode($jsonString, true);
+    try {
+        $salt = hex2bin($jsondata["s"]);
+        $iv  = hex2bin($jsondata["iv"]);
+    } catch (Exception $e) {
+        return null;
+    }
+    $ct = base64_decode($jsondata["ct"]);
+    $concatedPassphrase = $passphrase . $salt;
+    $md5 = array();
+    $md5[0] = md5($concatedPassphrase, true);
+    $result = $md5[0];
+    for ($i = 1; $i < 3; $i++) {
+        $md5[$i] = md5($md5[$i - 1] . $concatedPassphrase, true);
+        $result .= $md5[$i];
+    }
+    $key = substr($result, 0, 32);
+    $data = openssl_decrypt($ct, 'aes-256-cbc', $key, true, $iv);
+    return json_decode($data, true);
+}
+
+/**
+ * Encrypt value to a cryptojs compatiable json encoding string
+ *
+ * @param mixed $passphrase
+ * @param mixed $value
+ * @return string
+ */
+function cryptoJsAesEncrypt($value, $passphrase)
+{
+    $salt = openssl_random_pseudo_bytes(8);
+    $salted = '';
+    $dx = '';
+    while (strlen($salted) < 48) {
+        $dx = md5($dx . $passphrase . $salt, true);
+        $salted .= $dx;
+    }
+    $key = substr($salted, 0, 32);
+    $iv  = substr($salted, 32, 16);
+    $encrypted_data = openssl_encrypt(json_encode($value), 'aes-256-cbc', $key, true, $iv);
+    $data = array("ct" => base64_encode($encrypted_data), "iv" => bin2hex($iv), "s" => bin2hex($salt));
+    return json_encode($data);
+}
+
+
+function jsonEncrypted($data, $http_code = 200)
+{
+
+    app()->response()->setHeader('Content-Type', 'application/json');
+    app()->response()->setCode($http_code);
+
+    $enc = cryptoJsAesEncrypt($data, config('application_key'));
+
+    // app()->response()->setBody(json_encode($data));
+    app()->response()->setBody(json_encode(['p__l__e__p' => $enc]));
+    return app()->response();
+}
+
+
+function getAppUrlWithLanguage($append = '')
+{
+
+    if (!empty($append)) {
+        $append = "/$append";
+    }
+    return app()->request()->appUrl() . "/" . config('languages.language') . "$append";
+}
+function printAppUrlWithLanguage($append = '')
+{
+    if (!empty($append)) {
+        $append = "/$append";
+    }
+    echo app()->request()->appUrl() . "/" . config('languages.language') . "$append";
 }

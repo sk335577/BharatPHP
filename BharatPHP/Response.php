@@ -601,6 +601,9 @@ class Response
                 if (is_null($cookie['domain'])) {
                     $cookie['domain'] = '';
                 }
+                if(is_null($cookie['value'])){
+                    $cookie['value']='';
+                }
                 setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure'],$cookie['httponly']);
             }
         }
