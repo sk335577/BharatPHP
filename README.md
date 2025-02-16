@@ -68,6 +68,27 @@ CREATE TABLE IF NOT EXISTS sessions (
   PRIMARY KEY ('id')
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;`
 
+`
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `last_password_update_timestamp` timestamp NULL DEFAULT NULL,
+  `user_type` varchar(100) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `auth_2fa` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `reset_password_secret` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `reset_password_secret_generated_time` varchar(255) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `password_history` longtext COLLATE utf8mb4_unicode_520_ci,
+  `last_login_timestamp` datetime DEFAULT NULL,
+  `is_password_reset_required` tinyint(1) DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `modified_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_520_ci;
+`
+
 
 `Schema::create('cache', function (Blueprint $table) {
    15             $table->string('key')->primary();
