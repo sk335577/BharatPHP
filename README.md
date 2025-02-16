@@ -152,3 +152,23 @@ Created by [@Sandeep Kumar](http://sandeepkumarpal.dev/) - feel free to contact 
 <!-- This project is open source and available under the [... License](). -->
 
 <!-- You don't have to include all sections - just the one's relevant to your project -->
+
+<!-- 
+ /*
+  "repositories": {
+    "BharatPHP": { 
+      "type": "package",
+      "package": {
+        "name": "sk335577/BharatPHP",  
+        "version": "1.0",
+        "source": {
+          "url": "https://github.com/sk335577/BharatPHP.git", 
+          "type": "git",
+          "reference": "main"
+        }
+      }
+    }
+  },
+  */
+
+  -->
